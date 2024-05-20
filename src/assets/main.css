@@ -1,36 +1,30 @@
 @import './base.css';
 
 #app {
-  max-width: 1280px;
+  background: rgb(38, 34, 77);
+  /* background: rgb(59, 55, 105); */
   margin: 0 auto;
+  color: #ab9ac0;
+  /* max-width: 1280px;
+
   padding: 2rem;
   font-weight: normal;
-  background: linear-gradient(0.45turn, #faacc4, #f5aed7, #ebb2ff);
+  background: linear-gradient(0.45turn, #faacc4, #f5aed7, #ebb2ff); */
 }
 
 a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
+.green {}
+
+svg {
+  fill: #ab9ac0;
 }
 
 @media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
+  a:hover {}
 }
 
 @media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
+  body {}
 
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
+  #app {}
 }

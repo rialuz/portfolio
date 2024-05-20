@@ -1,0 +1,22 @@
+{
+    "experience": [
+        {
+            "id":0,
+            "title":"Full Stack Engineer",
+            "company":"Bloomberg Industry Group",
+            "startDate":"January 2023",
+            "endDate":"February 2024",
+            "description":"Developed multiple frontend features and collaborated with team members to oversee deployment process and ensure the feature was rolled out by the deadline. Led the conversion and deployment of multiple repositories to a single-spa architecture, improving site performance, code maintainability and scalability, and engaged in knowledge sharing with team member which helped with the success of the conversion and future work. Collaborated with QA to implement end-to-end testing for critical pages, ensuring the reliability and functionality of the platform across different scenarios",
+            "techStack": []
+        },
+        {
+            "id":1,
+            "title":"Full Stack Engineer II",
+            "company":"Catalyte",
+            "startDate":"September 2022",
+            "endDate":"February 2024",
+            "description":"Worked in an agile scrum team of eight to develop an e-commerce full-stack application using React, Java with Spring Boot and Spring Security, and Jest. Independently designed and built a management system full-stack application using React, Java with Spring Boot, PostgreSQL, Jest, and JUnit",
+            "techStack": [] 
+        }
+    ]
+}
