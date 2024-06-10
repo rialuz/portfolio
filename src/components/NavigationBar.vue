@@ -46,7 +46,7 @@ const redirect = (link) => {
 <style scoped>
 
 .nav {
-    background: rgb(59, 55, 105);
+    background: #ede8f5;
     height: 50px;
     display: flex;
     justify-content: space-between;
@@ -75,7 +75,7 @@ const redirect = (link) => {
     }
 
     a {
-        color: #ab9ac0;
+        color: #3d52a0;
         text-decoration: none;  
     }
 }

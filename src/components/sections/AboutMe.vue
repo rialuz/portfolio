@@ -18,7 +18,7 @@
 
             </div>  
             <div class="img-container">
-            <img src="../data/img.jpg" alt="image of luz" />
+            <img src="../data/images/img.jpg" alt="image of luz" />
             </div>    
         </div>
        
@@ -35,7 +35,7 @@ img {
     width: 250px;
     height: 250px;
     border-radius: 50%;
-    border: 4px solid white;
+    border: 4px solid #3d52a0;
     overflow: hidden;
 }
 

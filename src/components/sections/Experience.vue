@@ -2,15 +2,25 @@
 import {ref} from 'vue'
 import experienceData from '../data/workexperience.json'
 
-const data = ref(experienceData.experience)
+const data = ref(experienceData.experience);
+
+const regex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
 
     for(const experience of data.value){
-    console.log(data.value)
+    console.log(data.value);
     let summary = experience.description;
     const arr = summary.split(". ");
 
     experience.summary = arr;
+
+  
+    const url = experience.description.match(regex);
+    console.log(url);
   }
+
+
+
+
 
 </script>
 
@@ -18,18 +28,19 @@ const data = ref(experienceData.experience)
   <div id="experience" class="experience-section">
     <h1 >Experience</h1>
 <v-sheet
- color="rgb(38, 34, 77)"
+ color="#ede8f5"
  elevation="1" 
  rounded="lg"
+ class="v-sheet"
   >
     
     <div class="d-flex flex-row">
     <v-tabs
       v-model="data[0].id"
       :items="data"
-      
+      color="#3d52a0"
       height="60" 
-      slider-color="rgb(59, 55, 105)"
+      slider-color="#7091e6"
       direction="vertical"
     >
       <template v-slot:tab="{ item }">
@@ -37,12 +48,13 @@ const data = ref(experienceData.experience)
           :text="item.company"
           :value="item.company"
           class="text-none"
+          color="#3d52a0"
         ></v-tab>
       </template>
 
       <template v-slot:item="{ item }">
         <v-tabs-window-item
-        
+          
           :value="item.company"
            class="window-item"
             >
@@ -53,7 +65,7 @@ const data = ref(experienceData.experience)
 
           <div class="experience-summary">
             <ul v-for="text of item.summary">
-              <li>{{ text }}</li>
+              <li>{{ text }}</li><a v-if="text.includes('Selected')" href="https://www.catalyte.io/alumni-stories/luz/">https://www.catalyte.io/alumni-stories/luz/</a>
             </ul>
           </div>
           
@@ -69,9 +81,14 @@ const data = ref(experienceData.experience)
 
 <style scoped>
 
+.v-sheet {
+  color: #3d52a0 !important;
+}
+
 .experience-section {
   margin: 0 auto;
   width: 80vw;
+  color: #3d52a0;
 }
 
 .window-item {

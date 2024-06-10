@@ -1,22 +1,16 @@
 @import './base.css';
 
 #app {
-  background: rgb(38, 34, 77);
-  /* background: rgb(59, 55, 105); */
+  background: #ede8f5;
   margin: 0 auto;
-  color: #ab9ac0;
-  /* max-width: 1280px;
-
-  padding: 2rem;
-  font-weight: normal;
-  background: linear-gradient(0.45turn, #faacc4, #f5aed7, #ebb2ff); */
+  color: #3d52a0;
 }
 
 a,
 .green {}
 
 svg {
-  fill: #ab9ac0;
+  fill: #3d52a0;
 }
 
 @media (hover: hover) {
