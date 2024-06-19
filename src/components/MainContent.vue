@@ -9,8 +9,6 @@ import Projects from './sections/projects/Projects.vue';
     <AboutMe />
     <Experience class="experience  " />
     <Projects />
-
-    
   </div>
 </template>
   
