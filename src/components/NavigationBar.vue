@@ -1,4 +1,5 @@
 <script setup>
+import DownloadIcon from './icons/DownloadIcon.vue';
 import GithubIcon from './icons/GithubIcon.vue';
 import LinkedInIcon from './icons/LinkedInIcon.vue' 
 
@@ -30,6 +31,13 @@ const redirect = (link) => {
         </div>
 
         <div class="socials">
+
+            <a href="Resume.LuzLopezMarcano.2024.pdf" download>
+            <DownloadIcon />                
+            </a><span>Resume</span>                
+
+
+
             <!-- Icons - Email, LinkedIn, Github -->
             <a href="https://github.com/rialuz?tab=repositories" >
             <GithubIcon />
@@ -38,6 +46,8 @@ const redirect = (link) => {
             <a href="https://www.linkedin.com/in/luzlmarcano/" >
             <LinkedInIcon /> 
             </a>
+
+
         </div>
     </div>
 

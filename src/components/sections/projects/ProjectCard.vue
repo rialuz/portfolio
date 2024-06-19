@@ -22,10 +22,8 @@ import GithubIcon from '@/components/icons/GithubIcon.vue';
             </div>
 
             <div>{{ props.description }}</div>
-
-            <div style="margin-top: 25px;"><span style="font-weight: 600;">TechStack:</span> {{ props.techUsed }}</div>
-
         </div>
+        <div class="techStack"><span>TechStack:</span> {{ props.techUsed }}</div>
     </div>
 
 </template>
@@ -38,6 +36,8 @@ import GithubIcon from '@/components/icons/GithubIcon.vue';
     margin: auto 10px;
     border: 1px solid grey;
     box-shadow: 5px 5px grey;
+    display: flex;
+    flex-direction: column;
 }
 
 img {
@@ -45,14 +45,29 @@ img {
     height: inherit;
 }
 
+.techStack {
+    margin-left: 5px;
+    margin-right: 5px;
+
+    span {
+        font-weight: 600;
+    }
+}
+
 .project-title {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    h3{
+        font-weight: 500;
+    }
+    
 }
 
 .project-description {
-    margin: auto 5px;
+    height: -webkit-fill-available;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
 

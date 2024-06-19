@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import ProjectCard from './ProjectCard.vue';
 import ToDoApp from '../../data/images/ToDoApp.png'
+import Medspot from '../../data/images/MedspotImg.png'
 
 const toDoAppImg = ToDoApp
 
@@ -8,16 +9,16 @@ const projects = [
     {
         title: 'To Do App',
         imgSrc: toDoAppImg,
-        description: 'Full-stack Task List application built with Vue.js, Node.js, and PSQL. A user is able to view to do tasks, create new tasks, update existing tasks, and delete tasks. Set up authorization and authentication so a user has a simple login with their username and if they are an admin user, they can utilize full CRUD actions.',
-        githubLink: 'https://github.com/rialuz/todo-app   ',
-        tech: 'Vue.js, Node.js, Remult, PSQL'
+        description: 'Full-stack To Do List application built with Vue.js, Node.js, Remult, and PSQL. The purpose of building this application is to get familiar with Node.js and Remult. Admin users can utilize full CRUD actions on tasks, while non-admin users have read-only access and can update the completed status of a task.',
+        githubLink: 'https://github.com/rialuz/todo-app',
+        tech: 'Vue.js, Node.js, Express, Remult, PSQL'
     },
     {
-        title: '',
-        imgSrc: '',
-        description: '',
-        githubLink: '',
-        tech: ''
+        title: 'MedSpot',
+        imgSrc: Medspot,
+        description: 'Patient management system full-stack application using React, Java with SpringBoot, PostgreSQL, and JUnit',
+        githubLink: 'https://github.com/rialuz/medspot',
+        tech: 'React.js, Java, Springboot, JUnit, PSQL'
     },
 ]
 
@@ -29,12 +30,9 @@ const projects = [
             <h1 >Projects</h1>
             <div class="project-cards">
             <div v-for="project of projects" >
-                <!-- 'projectName', 'img', 'githubLink', 'description', 'techUsed' -->
                <ProjectCard :img=project.imgSrc :project-name=project.title :description=project.description :github-link=project.githubLink :tech-used=project.tech />  
             </div>                
             </div>
-
-              
         </div>
 
     </div>
@@ -44,7 +42,6 @@ const projects = [
 <style scoped>
 
 .projects-section {
-    border: 1px solid black;
     margin: 0 auto;
     width: 80vw;
     color: #3d52a0;
@@ -56,6 +53,13 @@ const projects = [
 }
 
 .project-cards {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    overflow-x: scroll;
 }
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
 </style>
