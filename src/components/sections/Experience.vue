@@ -23,8 +23,8 @@ const regex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\
 
   const innerWidth = ref(window.innerWidth);
 
-  onMounted(() => {
-    nextTick(() => {
+  onMounted( async () => {
+   await nextTick(() => {
       window.addEventListener('resize',onResize);
     })
   })
