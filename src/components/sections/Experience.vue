@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import {ref} from 'vue'
 import experienceData from '../data/workexperience.json'
+import { onMounted } from 'vue';
+import { nextTick } from 'process';
+import { onBeforeUnmount } from 'vue';
 
 const data = ref(experienceData.experience);
 
@@ -18,8 +21,21 @@ const regex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\
     console.log(url);
   }
 
+  const innerWidth = ref(window.innerWidth);
 
+  onMounted(() => {
+    nextTick(() => {
+      window.addEventListener('resize',onResize);
+    })
+  })
 
+  onBeforeUnmount(() => {
+    window.removeEventListener('resize', onResize);
+  })
+
+  const onResize = () => {
+    innerWidth.value = window.innerWidth;
+  }
 
 
 </script>
@@ -34,14 +50,14 @@ const regex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\
  class="v-sheet"
   >
     
-    <div class="d-flex flex-row">
+    <div :class="(innerWidth < 675) ? 'mx-auto' :'d-flex flex-row'">
     <v-tabs
       v-model="data[0].id"
       :items="data"
       color="#3d52a0"
       height="60" 
       slider-color="#7091e6"
-      direction="vertical"
+      :direction="(innerWidth < 675) ? 'horizontal' : 'vertical'"
     >
       <template v-slot:tab="{ item }">
         <v-tab
@@ -56,7 +72,6 @@ const regex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\
         <v-tabs-window-item
           
           :value="item.company"
-           class="window-item"
             >
           <div class="experience-details">
             <h3>{{ item.title }} @ {{ item.company }}</h3>
@@ -91,12 +106,11 @@ const regex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\
   color: #3d52a0;
 }
 
-.window-item {
+/* .window-item {
   width: 55vw;
-  /* margin-right: 20px; */
   margin: 0 auto;
   padding: 0 30px;
-}
+} */
 
 .experience-summary {
   margin-top: 20px;

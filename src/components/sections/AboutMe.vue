@@ -70,7 +70,8 @@ img {
   ul {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    margin-left: 30px;
+    width: 365px;
+    /* margin-left: 30px; */
   }
 }
 

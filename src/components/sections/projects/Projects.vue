@@ -67,10 +67,28 @@ const projects = [
 .project-cards {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  overflow-x: scroll;
 }
 
-::-webkit-scrollbar {
-  width: 5px;
+@media screen and (width >= 850px) and (width <= 1280px){
+  .project-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    div{
+      margin-top: 20px;
+    }
+  }
+}
+
+@media screen and (width < 850px) {
+  .project-cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    place-items: center;
+
+    div{
+      margin-top: 20px;
+    }
+  }
 }
 </style>
