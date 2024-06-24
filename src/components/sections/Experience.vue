@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import {ref} from 'vue'
 import experienceData from '../data/workexperience.json'
-import { onMounted } from 'vue';
-import { nextTick } from 'process';
+import { onMounted, nextTick } from 'vue';
 import { onBeforeUnmount } from 'vue';
 
 const data = ref(experienceData.experience);
