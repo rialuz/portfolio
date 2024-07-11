@@ -3,7 +3,7 @@ import ProjectCard from './ProjectCard.vue'
 import ToDoApp from '../../data/images/ToDoApp.png'
 import Medspot from '../../data/images/MedspotImg.png'
 import SnakeGame from '../../data/images/SnakeGame.png'
-
+import RPS from '../../data/images/RPSGame.png'
 const toDoAppImg = ToDoApp
 
 const projects = [
@@ -19,9 +19,17 @@ const projects = [
     title: 'MedSpot',
     imgSrc: Medspot,
     description:
-      'Patient management system full-stack application using React, Java with SpringBoot, PostgreSQL, and JUnit',
+      'Patient management system full-stack application using React, Java with SpringBoot, PostgreSQL, and JUnit.',
     githubLink: 'https://github.com/rialuz/medspot',
     tech: 'React.js, Java, Springboot, JUnit, PSQL'
+  },
+  {
+    title: "Rock, Paper, Scissor, SHOOT!",
+    imgSrc: RPS,
+    description:
+    'Play a game of Rock, Paper, Scissor against a computer with this cute, aesthetic UI! Local Co-op coming soon. <3',
+    githubLink: 'https://github.com/rialuz/rock-paper-scissor',
+    tech: 'Vue.js, JavaScript'
   },
   {
     title: 'Snake Game',
