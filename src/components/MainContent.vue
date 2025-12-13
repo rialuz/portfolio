@@ -1,25 +1,22 @@
 <script setup lang="ts">
-import AboutMe from './sections/AboutMe.vue'
-import Experience from './sections/Experience.vue';
-import Projects from './sections/projects/Projects.vue';
+import Hero from './sections/Hero.vue'
+import Stats from './sections/Stats.vue'
+import About from './sections/About.vue'
+import Skills from './sections/Skills.vue'
+import Experience from './sections/Experience.vue'
+import Projects from './sections/projects/Projects.vue'
 </script>
 
 <template>
-  <div class="main-content">
-    <AboutMe />
-    <Experience class="experience  " />
+  <main>
+    <Hero />
+    <About />
+    <Stats />
+    <Skills />
+    <Experience />
     <Projects />
-  </div>
+  </main>
 </template>
   
 <style scoped>
-.main-content {
-    display: flex;
-    flex-direction: column;  
-    row-gap: 25px;
-    justify-content: center;
-    padding-top: 100px;
-    margin-bottom: 100px;
-
-}
 </style>

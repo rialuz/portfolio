@@ -1,0 +1,49 @@
+{
+  "experience": [
+    {
+      "id": "loji",
+      "title": "Software Developer",
+      "company": "Loji",
+      "startDate": "August 2024",
+      "endDate": "Present",
+      "description": [
+        "Working on multiple projects, collaborating with team members to build out new features and improve existing ones.",
+        "Frontend team lead for internal project, helping with development and delegating tasks to junior devs.",
+        "Set up Stripe payment integration and Postmark email integration for internal project.",
+        "Collaborate with team members effectively to meet project deadlines.",
+        "Proactively identifying existing issues and developing effective solutions for bug fixes to improve user experience.",
+        "Pick up new technologies as needed for different projects."
+      ],
+      "techStack": ["Next.js", "Vue.js", "TypeScript", "Tailwind CSS", "C#"]
+    },
+    {
+      "id": "bloomberg",
+      "title": "Full Stack Engineer",
+      "company": "Bloomberg Industry Group",
+      "startDate": "January 2023",
+      "endDate": "February 2024",
+      "description": [
+        "Developed multiple frontend features and collaborated with team members to oversee deployment process and ensure the feature was rolled out by the deadline",
+        "Led the conversion and deployment of multiple repositories to a single-spa architecture, improving site performance, code maintainability and scalability",
+        "Engaged in knowledge sharing with team members which helped with the success of the conversion and future work",
+        "Collaborated with QA to implement end-to-end testing for critical pages, ensuring the reliability and functionality of the platform across different scenarios",
+        "Proactively identified existing issues and developed effective solutions for bug fixes to improve user experience"
+      ],
+      "techStack": ["React", "TypeScript", "Java", "Spring Boot", "PostgreSQL", "Playwright", "JUnit"]
+    },
+    {
+      "id": "catalyte",
+      "title": "Full Stack Engineer II",
+      "company": "Catalyte",
+      "startDate": "September 2022",
+      "endDate": "February 2024",
+      "description": [
+        "Worked in an agile scrum team of eight to develop an e-commerce full-stack application using React, Java with Spring Boot and Spring Security, and Jest",
+        "Independently designed and built a management system full-stack application using React, Java with Spring Boot, PostgreSQL, Jest, and JUnit",
+        "Selected to feature in an interview video shoot to share my software developer journey which is published on the company site"
+      ],
+      "techStack": ["React", "Java", "Spring Boot", "PostgreSQL", "Jest", "JUnit"]
+    }
+  ]
+}
+

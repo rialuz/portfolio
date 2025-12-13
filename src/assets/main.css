@@ -1,24 +1,67 @@
 @import './base.css';
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 #app {
-  background: #ede8f5;
+  @apply bg-seashell;
   margin: 0 auto;
-  color: #3d52a0;
+  font-family: 'Inter', sans-serif;
 }
 
-a,
-.green {}
+* {
+  scroll-behavior: smooth;
+}
+
+a {
+  transition: all 0.3s ease;
+}
 
 svg {
-  fill: #3d52a0;
+  transition: all 0.3s ease;
 }
 
-@media (hover: hover) {
-  a:hover {}
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
 }
 
-@media (min-width: 1024px) {
-  body {}
+::-webkit-scrollbar-track {
+  background: #fae1dd;
+}
 
-  #app {}
+::-webkit-scrollbar-thumb {
+  background: #fec89a;
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #fec5bb;
+}
+
+
+.glass {
+  background: rgba(254, 237, 217, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(254, 197, 187, 0.2);
+}
+
+
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s ease-out;
+}
+
+.reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+html {
+  scroll-behavior: smooth;
 }

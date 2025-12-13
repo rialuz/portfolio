@@ -1,0 +1,68 @@
+{
+  "skillCategories": [
+    {
+      "category": "Frontend",
+      "icon": "Code2",
+      "color": "from-powder-blush to-almond-silk",
+      "skills": [
+        { "name": "Vue.js", "level": 90 },
+        { "name": "React.js", "level": 85 },
+        { "name": "TypeScript", "level": 88 },
+        { "name": "HTML/CSS", "level": 95 }
+      ]
+    },
+    {
+      "category": "Backend",
+      "icon": "Database",
+      "color": "from-peach-glow to-peach-fuzz",
+      "skills": [
+        { "name": "Node.js", "level": 80 },
+        { "name": "Java", "level": 75 },
+        { "name": "PostgreSQL", "level": 78 },
+        { "name": "Express", "level": 82 }
+      ]
+    },
+    {
+      "category": "Testing",
+      "icon": "TestTube",
+      "color": "from-soft-blush to-powder-petal",
+      "skills": [
+        { "name": "Playwright", "level": 85 },
+        { "name": "Jest", "level": 80 },
+        { "name": "JUnit", "level": 75 },
+        { "name": "E2E Testing", "level": 82 }
+      ]
+    },
+    {
+      "category": "Tools & DevOps",
+      "icon": "Wrench",
+      "color": "from-almond-silk to-soft-linen",
+      "skills": [
+        { "name": "Git/GitLab", "level": 90 },
+        { "name": "CI/CD", "level": 80 },
+        { "name": "New Relic", "level": 75 },
+        { "name": "Vite/Webpack", "level": 78 }
+      ]
+    }
+  ],
+  "additionalSkills": [
+    "Tailwind CSS",
+    "Vuetify",
+    "PrimeVue",
+    "Springboot",
+    "Remult",
+    "Agile/Scrum"
+  ],
+  "techStack": [
+    "HTML, CSS, JS",
+    "TypeScript",
+    "Vue.js",
+    "React.js",
+    "Playwright",
+    "Jest",
+    "Java",
+    "Git/GitLab",
+    "CI/CD",
+    "New Relic"
+  ]
+}

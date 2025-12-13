@@ -1,0 +1,94 @@
+{
+  "personal": {
+    "name": "Luz Lopez Marcano",
+    "title": "Software Engineer",
+    "location": "Maryland, USA",
+    "email": "l.lopezmarcano4@gmail.com",
+    "github": "https://github.com/rialuz?tab=repositories",
+    "linkedin": "https://www.linkedin.com/in/luzlmarcano/",
+    "hero": {
+      "greeting": "Hey there!",
+      "tagline": "Crafting beautiful, responsive web experiences with passion and precision"
+    },
+    "about": {
+      "introduction": "I am a passionate software engineer based in Maryland with a little over 3 years of hands-on work experience developing new features as well as improving on existing features.",
+      "passion": "I enjoy the challenge of finding effective solutions to problems I face. I've learned a lot in my past experiences and am confident in my ability to be a reliable asset to any team I am in.",
+      "keyStrengths": [
+        "Always learning new technologies and best practices",
+        "Strong problem-solving and analytical skills",
+        "Team player with excellent communication abilities"
+      ],
+      "funFacts": [
+        "I am reading historial fiction and fantasy novels",
+        "I am playing video games.",
+        "I am working on new projects and learning how to set up a picrawler."
+      ]
+    }
+  },
+  "stats": [
+    {
+      "value": 3,
+      "suffix": "+",
+      "label": "Years Experience",
+      "icon": "Briefcase"
+    },
+    {
+      "value": 10,
+      "suffix": "+",
+      "label": "Technologies Worked With",
+      "icon": "Code"
+    },
+    {
+      "value": 4,
+      "suffix": "+",
+      "label": "Projects Completed",
+      "icon": "Trophy"
+    },
+    {
+      "value": 100,
+      "suffix": "%",
+      "label": "Passion & Dedication",
+      "icon": "Lightbulb"
+    }
+  ],
+  "skills": [
+    {
+      "category": "Frontend",
+      "icon": "Code2",
+      "color": "from-powder-blush to-almond-silk",
+      "skills": ["Next.js", "Vue.js", "React.js", "TypeScript", "HTML/CSS"]
+    },
+    {
+      "category": "Backend",
+      "icon": "Database",
+      "color": "from-peach-glow to-peach-fuzz",
+      "skills": ["C#", "Java", "PostgreSQL", "MySQL"]
+    },
+    {
+      "category": "Testing",
+      "icon": "TestTube",
+      "color": "from-soft-blush to-powder-petal",
+      "skills": ["Playwright", "Jest", "JUnit", "E2E Testing"]
+    },
+    {
+      "category": "Tools & DevOps",
+      "icon": "Wrench",
+      "color": "from-almond-silk to-soft-linen",
+      "skills": ["Git/GitLab", "CI/CD", "New Relic", "Vite/Webpack"]
+    }
+  ],
+  "worksInProgress": ["C#", "Docker", "Kubernetes", "Three.js"],
+  "additionalSkills": [],
+  "techStack": [
+    "HTML, CSS, JS",
+    "TypeScript",
+    "Vue.js",
+    "React.js",
+    "Playwright",
+    "Jest",
+    "Java",
+    "Git/GitLab",
+    "CI/CD",
+    "New Relic"
+  ]
+}

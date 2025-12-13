@@ -1,0 +1,57 @@
+{
+  "personal": {
+    "name": "Luz Lopez Marcano",
+    "title": "Software Engineer",
+    "location": "Maryland, USA",
+    "email": "l.lopezmarcano4@gmail.com",
+    "github": "https://github.com/rialuz?tab=repositories",
+    "linkedin": "https://www.linkedin.com/in/luzlmarcano/",
+    "image": "../components/data/images/img.jpg"
+  },
+  "hero": {
+    "greeting": "Hey there!",
+    "introduction": "I'm Luz Lopez Marcano",
+    "tagline": "Crafting beautiful, responsive web experiences with passion and precision"
+  },
+  "about": {
+    "intro": "I'm a passionate software engineer based in Maryland with 1.5 years of hands-on work experience developing new features and improving existing ones.",
+    "description": "I love the challenge of finding creative solutions to complex problems. Every project is an opportunity to learn, grow, and create something amazing.",
+    "additionalInfo": [
+      "Passionate about clean code and user experience",
+      "Continuous learner exploring new technologies",
+      "Team player with strong communication skills"
+    ]
+  },
+  "stats": [
+    {
+      "value": 1.5,
+      "suffix": "+",
+      "label": "Years Experience",
+      "icon": "briefcase"
+    },
+    {
+      "value": 10,
+      "suffix": "+",
+      "label": "Technologies",
+      "icon": "code"
+    },
+    {
+      "value": 4,
+      "suffix": "+",
+      "label": "Projects Completed",
+      "icon": "trophy"
+    },
+    {
+      "value": 100,
+      "suffix": "%",
+      "label": "Commitment",
+      "icon": "target"
+    }
+  ],
+  "contact": {
+    "title": "Let's Connect",
+    "subtitle": "I'd love to hear from you!",
+    "description": "I'm always open to discussing new projects, creative ideas, or opportunities to be part of your visions. Feel free to reach out!"
+  }
+}
+
