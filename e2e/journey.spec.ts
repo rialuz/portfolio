@@ -176,27 +176,31 @@ test.describe('projects', () => {
     await open(page)
     await expect(page.getByRole('heading', { level: 3, name: 'TavernScribe' })).toBeVisible()
     await page.getByRole('button', { name: 'Personal' }).click()
-    await expect(page.getByRole('heading', { name: 'Pathway' })).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'Little Quest' })).toBeVisible()
     await expect(page.getByRole('heading', { level: 3, name: 'TavernScribe' })).toBeHidden()
   })
 
-  test('personal projects page through with the arrows, older apps last', async ({ page }) => {
+  test('personal projects page through with the arrows: what is built first, newest first', async ({ page }) => {
     await open(page)
     await page.getByRole('button', { name: 'Personal' }).click()
     const previous = page.getByRole('button', { name: 'Previous projects' })
     const next = page.getByRole('button', { name: 'Next projects' })
+    const shown = page.locator('ol:not([data-collapsed]) h3').filter({ visible: true })
     await expect(previous).toBeDisabled()
-    await expect(page.getByRole('heading', { level: 3, name: 'Pathway' })).toBeVisible()
+    await expect(shown.first()).toHaveText('Little Quest')
+    await expect(page.getByRole('link', { name: /Try it live\s*: Little Quest/ })).toHaveAttribute('href', 'https://little-quest-rho.vercel.app/')
     await expect(page.getByRole('heading', { level: 3, name: 'Snake Game' })).toBeHidden()
+    // no page is left with one project on its own
+    expect(await shown.count()).toBeGreaterThan(1)
 
     await next.click()
-    await expect(page.getByText('Page 2 of 2')).toBeVisible()
+    await expect(page.getByText(/^Page 2 of \d$/)).toBeVisible()
     await expect(page.getByRole('heading', { level: 3, name: 'Snake Game' })).toBeVisible()
-    await expect(page.getByRole('heading', { level: 3, name: 'Pathway' })).toBeHidden()
-    await expect(next).toBeDisabled()
+    await expect(page.getByRole('heading', { level: 3, name: 'Little Quest' })).toBeHidden()
+    expect(await shown.count()).toBeGreaterThan(1)
 
     await previous.click()
-    await expect(page.getByRole('heading', { level: 3, name: 'Pathway' })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 3, name: 'Little Quest' })).toBeVisible()
   })
 
   test('TavernScribe links to the live product, from the card and the experience panel', async ({ page }) => {
@@ -229,6 +233,8 @@ test.describe('without JavaScript', () => {
       await expect(panel(page, id)).toBeVisible()
     }
     await expect(page.getByRole('heading', { level: 3, name: 'TavernScribe' })).toBeVisible()
-    await expect(page.getByRole('heading', { name: 'Pathway' })).toBeVisible()
+    // every personal project too, the last page's as well as the first's
+    await expect(page.getByRole('heading', { name: 'Little Quest' })).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'Snake Game' })).toBeVisible()
   })
 })

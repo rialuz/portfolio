@@ -66,28 +66,20 @@ export const workProjects: WorkProject[] = [
 // Personal project repositories live on the personal account, not the work one in content/site.ts.
 const github = (repo: string) => ({ href: `https://github.com/rialuz/${repo}`, label: 'View on GitHub' })
 
-// In the order shown: what is coming up first, older apps last.
+// In the order shown: what is built first, newest first, then what is coming up.
 export const personalProjects: PersonalProject[] = [
-  {
-    slug: 'pathway',
-    title: 'Pathway',
-    status: 'next',
-    summary: 'A benefits screener that shows which programs someone may qualify for, and why.',
-    tags: ['CivicTech', 'Next.js', 'Vitest'],
-  },
-  {
-    slug: 'ripple',
-    title: 'Ripple',
-    status: 'planned',
-    summary: 'A planner that compares paying down debt against building savings, side by side.',
-    tags: ['FinTech', 'React'],
-  },
   {
     slug: 'little-quest',
     title: 'Little Quest',
-    status: 'planned',
-    summary: 'A study timer that turns focus sessions into quests, XP and a growing pixel character.',
-    tags: ['EdTech', 'Gaming'],
+    status: 'built',
+    summary:
+      'A focus timer that turns study sessions into quests. Finished sessions earn XP, and each level unlocks something new for the pixel character you make.',
+    tags: ['Next.js', 'TypeScript', '.NET 10', 'EF Core', 'PSQL'],
+    image: {
+      src: '/projects/little-quest.png',
+      alt: 'Little Quest during a focus session: a pixel character reading in a sunset meadow, beside the level bar and the timer',
+    },
+    link: { href: 'https://little-quest-rho.vercel.app/', label: 'Try it live' },
   },
   {
     slug: 'todo-app',
@@ -126,6 +118,21 @@ export const personalProjects: PersonalProject[] = [
     image: { src: '/projects/snake-game.png', alt: 'The Snake Game board' },
     link: github('snake-game'),
   },
+  {
+    slug: 'ripple',
+    title: 'Ripple',
+    status: 'planned',
+    summary: 'A planner that compares paying down debt against building savings, side by side.',
+    tags: ['FinTech', 'React'],
+  },
+  // Pathway is parked until there is something to show. Uncomment it to put it back.
+  // {
+  //   slug: 'pathway',
+  //   title: 'Pathway',
+  //   status: 'next',
+  //   summary: 'A benefits screener that shows which programs someone may qualify for, and why.',
+  //   tags: ['CivicTech', 'Next.js', 'Vitest'],
+  // },
 ]
 
 export const statusLabel: Record<PersonalStatus, string> = {

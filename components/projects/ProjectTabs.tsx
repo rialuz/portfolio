@@ -117,20 +117,19 @@ const columns = (n: number) => ({ '--n': Math.min(n, MAX_COLUMNS) }) as CSSPrope
 
 /**
  * Personal projects are shown a page at a time, so the older apps are not all loaded up
- * front. What is coming up and what is already built never share a page.
+ * front: what is built first, then what is coming up. They are spread evenly over the pages,
+ * so six projects are three and three, and no page is left with one project on its own.
  */
 const PAGE_SIZE = MAX_COLUMNS
 const personalPages: { projects: PersonalProject[]; first: number }[] = []
 {
-  const upcoming = personalProjects.filter((p) => p.status !== 'built')
-  const built = personalProjects.filter((p) => p.status === 'built')
-  let first = 1
-  for (const group of [upcoming, built]) {
-    for (let i = 0; i < group.length; i += PAGE_SIZE) {
-      const projects = group.slice(i, i + PAGE_SIZE)
-      personalPages.push({ projects, first })
-      first += projects.length
-    }
+  const ordered = [
+    ...personalProjects.filter((p) => p.status === 'built'),
+    ...personalProjects.filter((p) => p.status !== 'built'),
+  ]
+  const size = Math.ceil(ordered.length / Math.ceil(ordered.length / PAGE_SIZE))
+  for (let i = 0; i < ordered.length; i += size) {
+    personalPages.push({ projects: ordered.slice(i, i + size), first: i + 1 })
   }
 }
 
