@@ -21,6 +21,8 @@ export interface PersonalProject {
   tags: string[]
   image?: { src: string; alt: string }
   link?: { href: string; label: string }
+  /** The source code, shown beside `link` when the project has a live site as well. */
+  repo?: { href: string; label: string }
 }
 
 export const workProjects: WorkProject[] = [
@@ -80,6 +82,21 @@ export const personalProjects: PersonalProject[] = [
       alt: 'Little Quest during a focus session: a pixel character reading in a sunset meadow, beside the level bar and the timer',
     },
     link: { href: 'https://little-quest-rho.vercel.app/', label: 'Try it live' },
+    repo: github('little-quest'),
+  },
+  {
+    slug: 'ripple',
+    title: 'Ripple',
+    status: 'built',
+    summary:
+      'A debt-versus-savings planner. Enter what you owe and what you can pay each month, and it compares three payoff strategies: when each clears the debt, what it costs in interest, and when the emergency fund is full.',
+    tags: ['Next.js', 'TypeScript', '.NET 10', 'EF Core', 'PSQL'],
+    image: {
+      src: '/projects/ripple.png',
+      alt: 'Ripple comparing three payoff strategies: a chart of remaining debt by month beside the recommended strategy',
+    },
+    // Not deployed, so the repository is the only link. It is on a different account from the others.
+    link: { href: 'https://github.com/loji-luz/ripple', label: 'View on GitHub' },
   },
   {
     slug: 'todo-app',
@@ -117,13 +134,6 @@ export const personalProjects: PersonalProject[] = [
     tags: ['Java', 'JFrame'],
     image: { src: '/projects/snake-game.png', alt: 'The Snake Game board' },
     link: github('snake-game'),
-  },
-  {
-    slug: 'ripple',
-    title: 'Ripple',
-    status: 'planned',
-    summary: 'A planner that compares paying down debt against building savings, side by side.',
-    tags: ['FinTech', 'React'],
   },
   // Pathway is parked until there is something to show. Uncomment it to put it back.
   // {

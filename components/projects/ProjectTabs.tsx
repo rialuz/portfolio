@@ -91,11 +91,18 @@ function PersonalCard({ project }: { project: PersonalProject }) {
       <h3 className="text-[19px] leading-snug font-bold lg:text-[21px]">{project.title}</h3>
       <p className="text-sm font-medium tracking-wide text-slate lg:text-[15px]">{project.summary}</p>
       <ChipList items={project.tags} label="Built with" />
-      {project.link && (
-        <a href={project.link.href} className={`mt-auto ${linkClass}`}>
-          {project.link.label}
-          <span className="sr-only">: {project.title}</span>
-        </a>
+      {(project.link || project.repo) && (
+        <p className="mt-auto flex flex-wrap gap-x-5 gap-y-1">
+          {[project.link, project.repo].map(
+            (link) =>
+              link && (
+                <a key={link.href} href={link.href} className={linkClass}>
+                  {link.label}
+                  <span className="sr-only">: {project.title}</span>
+                </a>
+              ),
+          )}
+        </p>
       )}
     </article>
   )
