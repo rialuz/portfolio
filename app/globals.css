@@ -1,0 +1,1009 @@
+@import 'tailwindcss';
+
+/* The wireframe palette as named tokens. lib/colors.ts mirrors the text colours for the contrast test. */
+@theme {
+  --color-navy: #23304d;
+  --color-blush: #fbe9e5;
+  --color-cream: #fff7ee;
+  --color-coral: #c65f4e; /* decorative only: shadows, bullets, large badge numbers */
+  --color-coral-ink: #a9432f; /* coral for text and filled chips */
+  --color-coral-bright: #e07a5f;
+  --color-rose: #f2b5b0;
+  --color-petal: #f7c6c0;
+  --color-sand: #e9c29a;
+  --color-slate: #4a5470;
+  --color-plum: #6b5560;
+  --color-mist: #e9dce0;
+  --color-chip: #f6f2f0;
+  --color-chip-line: #e6deda;
+  --color-placeholder: #fdedea;
+  --color-dash: #8a8fa3;
+  --color-sky: #fbd1e3; /* top row of bg-hero.png */
+  --color-ground: #965e39; /* the brown face of the ground in bg-hero.png */
+
+  --font-sans: var(--font-dm-sans), system-ui, 'Segoe UI', sans-serif;
+  --font-pixel: var(--font-pixelify), var(--font-dm-sans), sans-serif;
+
+  --shadow-pixel-sm: 3px 3px 0 var(--color-navy);
+  --shadow-pixel: 4px 4px 0 var(--color-navy);
+  --shadow-pixel-lg: 6px 6px 0 var(--color-navy);
+  --shadow-coral: 5px 5px 0 var(--color-coral);
+  --shadow-coral-lg: 6px 6px 0 var(--color-coral);
+  --shadow-rose: 5px 5px 0 var(--color-rose);
+  --shadow-sand: 4px 4px 0 var(--color-sand);
+  --shadow-bright: 4px 4px 0 var(--color-coral-bright);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 88px; /* the sticky header */
+  }
+
+  body {
+    background: var(--color-blush);
+    color: var(--color-navy);
+    font-family: var(--font-sans);
+    font-size: 17px;
+    line-height: 1.6;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-navy);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  .on-navy :focus-visible {
+    outline-color: var(--color-cream);
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+}
+
+/* Collapsed tab panels and stop panels. Without JavaScript nothing is collapsed, so every
+   project and every stop can still be read. The script in app/layout.tsx adds .js. */
+html.js [data-collapsed] {
+  display: none;
+}
+
+html:not(.js) .js-only {
+  display: none;
+}
+
+/* ---------- Sprites ----------
+   One horizontal strip, played by stepping background-position. The numbers come from
+   lib/sprites.ts as custom properties; --s is the whole-number scale, inherited from the
+   scene the sprite sits in so a breakpoint can switch it. */
+.sprite {
+  display: block;
+  flex: none;
+  width: calc(var(--w) * var(--s, 1) * 1px);
+  height: calc(var(--h) * var(--s, 1) * 1px);
+  background-image: var(--sheet);
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  background-size: calc(var(--w) * var(--n) * var(--s, 1) * 1px) 100%;
+  image-rendering: pixelated;
+}
+
+.sprite[data-play='loop'] {
+  animation: sprite-loop var(--t) steps(var(--n)) infinite;
+}
+
+/* jump-none ends on the last frame and holds it. */
+.sprite[data-play='once'] {
+  animation: sprite-once var(--t) steps(var(--n), jump-none) 1 both;
+}
+
+.sprite[data-flipped] {
+  transform: scaleX(-1);
+}
+
+@keyframes sprite-loop {
+  to {
+    background-position-x: calc(var(--w) * var(--n) * var(--s, 1) * -1px);
+  }
+}
+
+@keyframes sprite-once {
+  to {
+    background-position-x: calc(var(--w) * (var(--n) - 1) * var(--s, 1) * -1px);
+  }
+}
+
+/* ---------- Hero scene ----------
+   --bs is the background scale, --cs the scale of the character and props. The steps keep
+   the 344px painting at least as wide as the window, so the ground always reaches both edges. */
+.hero {
+  --bs: 3;
+  --cs: 2;
+  --focus: 262; /* background column to keep in view: the character */
+  --anchor: 58%;
+  position: relative;
+  overflow: hidden;
+  background: var(--color-sky);
+}
+
+/* The ground fades into the page in hard steps, two background pixels at a time, so the
+   painting does not end on a hard brown edge. */
+.hero::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: calc(12px * var(--bs));
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--color-blush) 10%, transparent) 0.00% 16.67%,
+    color-mix(in srgb, var(--color-blush) 24%, transparent) 16.67% 33.33%,
+    color-mix(in srgb, var(--color-blush) 40%, transparent) 33.33% 50.00%,
+    color-mix(in srgb, var(--color-blush) 58%, transparent) 50.00% 66.67%,
+    color-mix(in srgb, var(--color-blush) 76%, transparent) 66.67% 83.33%,
+    color-mix(in srgb, var(--color-blush) 90%, transparent) 83.33% 100.00%
+  );
+}
+
+.hero-content {
+  position: relative;
+  /* room under the text card for the character and her bubble */
+  padding-bottom: calc(19px * var(--bs) + 62px * var(--cs) + 76px);
+}
+
+@media (min-width: 1024px) {
+  .hero {
+    --bs: 4;
+    --cs: 3;
+    --focus: 172;
+    --anchor: 50%;
+  }
+
+  .hero-content {
+    display: flex;
+    align-items: center;
+    min-height: min(calc(192px * var(--bs)), max(640px, calc(100svh - 76px)));
+    padding-bottom: calc(24px * var(--bs));
+  }
+}
+
+/* One step per 344px of window width, so the painting always covers it: --bs is the
+   smallest whole scale that does, and --cs stays about three quarters of it. */
+@media (min-width: 1376px) {
+  .hero {
+    --bs: 5;
+    --cs: 4;
+  }
+}
+
+@media (min-width: 1720px) {
+  .hero {
+    --bs: 6;
+    --cs: 5;
+  }
+}
+
+@media (min-width: 2064px) {
+  .hero {
+    --bs: 7;
+    --cs: 5;
+  }
+}
+
+@media (min-width: 2408px) {
+  .hero {
+    --bs: 8;
+    --cs: 6;
+  }
+}
+
+@media (min-width: 2752px) {
+  .hero {
+    --bs: 9;
+    --cs: 7;
+  }
+}
+
+@media (min-width: 3096px) {
+  .hero {
+    --bs: 10;
+    --cs: 8;
+  }
+}
+
+@media (min-width: 3440px) {
+  .hero {
+    --bs: 11;
+    --cs: 8;
+  }
+}
+
+@media (min-width: 3784px) {
+  .hero {
+    --bs: 12;
+    --cs: 9;
+  }
+}
+
+@media (min-width: 4128px) {
+  .hero {
+    --bs: 13;
+    --cs: 10;
+  }
+}
+
+@media (min-width: 4472px) {
+  .hero {
+    --bs: 14;
+    --cs: 11;
+  }
+}
+
+@media (min-width: 4816px) {
+  .hero {
+    --bs: 15;
+    --cs: 11;
+  }
+}
+
+@media (min-width: 5160px) {
+  .hero {
+    --bs: 16;
+    --cs: 12;
+  }
+}
+
+.hero-scene {
+  position: absolute;
+  bottom: 0;
+  left: clamp(calc(100% - 344px * var(--bs)), calc(var(--anchor) - var(--focus) * var(--bs) * 1px), 0px);
+  /* whole pixels only, so the art never lands between two screen pixels */
+  left: round(
+    clamp(calc(100% - 344px * var(--bs)), calc(var(--anchor) - var(--focus) * var(--bs) * 1px), 0px),
+    1px
+  );
+  width: calc(344px * var(--bs));
+  height: calc(192px * var(--bs));
+}
+
+.hero-scene > * {
+  position: absolute;
+}
+
+/* From 1024px the painting is centred. Past the last step it no longer covers the window,
+   and the sky colour fills the sides. */
+@media (min-width: 1024px) {
+  .hero-scene {
+    left: calc(50% - 172px * var(--bs));
+    left: round(calc(50% - 172px * var(--bs)), 1px);
+  }
+}
+
+.hero-bg {
+  --s: var(--bs);
+  left: 0;
+  top: 0;
+}
+
+/* Clouds lifted out of the painting. Each step moves one background pixel, so they stay
+   crisp. --x and --y are where the cloud sat in the painting; the negative delay starts it
+   there, and with motion off it simply rests there. */
+.hero-cloud {
+  --s: var(--bs);
+  left: calc(var(--x) * var(--bs) * 1px);
+  top: calc(var(--y) * var(--bs) * 1px);
+  animation: cloud-drift var(--d) steps(414) var(--at) infinite;
+}
+
+@keyframes cloud-drift {
+  from {
+    transform: translateX(calc((-70 - var(--x)) * var(--bs) * 1px));
+  }
+  to {
+    transform: translateX(calc((344 - var(--x)) * var(--bs) * 1px));
+  }
+}
+
+/* The ground is the white frosting strip the houses stand on, background rows 170 to 173.
+   Feet and the flag pole rest on row 172, so their bottom edge is row 173. */
+/* The flag stands just left of her, its pole on background column 240, so the text card
+   never covers it however wide the window is. The pole is 20px in from the sprite's left. */
+.hero-flag {
+  --s: var(--cs);
+  left: calc(240px * var(--bs) - 20px * var(--cs));
+  top: calc(173px * var(--bs) - 32px * var(--cs));
+}
+
+.hero-luz {
+  --s: var(--cs);
+  /* two empty rows sit under her feet in the 64px frame */
+  left: calc(262px * var(--bs) - 32px * var(--cs));
+  top: calc(173px * var(--bs) - 62px * var(--cs));
+}
+
+.hero-bubble {
+  left: calc(262px * var(--bs));
+  bottom: calc(19px * var(--bs) + 47px * var(--cs));
+  transform: translateX(-30%);
+}
+
+/* ---------- Scenes ----------
+   A season's moving pieces in the hero (components/scene/ScenePieces.tsx). --x and --y are a
+   piece's top left in background pixels; it is drawn at the background's pixel size or the
+   character's. Which files and colours a season uses comes from SceneStyles, not from here. */
+.scene-piece {
+  --x: var(--px);
+  left: calc(var(--x) * var(--bs) * 1px);
+  top: calc(var(--y) * var(--bs) * 1px);
+}
+
+.scene-piece[data-scale='bg'] {
+  --s: var(--bs);
+}
+
+.scene-piece[data-scale='character'] {
+  --s: var(--cs);
+}
+
+/* Crosses the sky as the clouds do, a background pixel a step, starting from its own spot. */
+.scene-piece[data-move='drift'] {
+  animation: cloud-drift var(--d) steps(414) var(--at) infinite;
+}
+
+.scene-piece[data-move='drift'][data-to='left'] {
+  animation-direction: reverse;
+}
+
+/* The dialogue hero's stage does not always show the top of the painting: on phones it is a
+   short strip of its foot, and on a wide window the painting is taller than the hero. A piece
+   that crosses the sky flies there at its own row if that is in view, otherwise just under
+   the top of the stage, and never lower than the ground it would stand on. --fh is its
+   frame's height. 100cqh is the stage's height. */
+.hero-d-stage {
+  container-type: size;
+}
+
+/* On the phone's short strip a piece can have another column to start from, one that is in
+   view there (--px-low, from the season's data). */
+@media (max-width: 1023px) {
+  .hero-d-stage .scene-piece {
+    --x: var(--px-low, var(--px));
+  }
+
+  .hero-d-stage .scene-piece[data-move='drift'] {
+    animation-delay: var(--at-low, var(--at));
+  }
+}
+
+.hero-d-stage .scene-piece[data-move='drift'] {
+  top: min(
+    max(calc(var(--y) * var(--bs) * 1px), calc(192px * var(--bs) - 100cqh + 12px)),
+    calc(173px * var(--bs) - var(--fh) * var(--s) * 1px)
+  );
+}
+
+/* A small loop in place: four spots, two background pixels apart. */
+.scene-piece[data-move='hover'] {
+  animation: scene-hover 2.4s steps(1) var(--at, 0s) infinite;
+}
+
+@keyframes scene-hover {
+  25% {
+    transform: translate(calc(2px * var(--bs)), calc(-2px * var(--bs)));
+  }
+  50% {
+    transform: translate(0, calc(-4px * var(--bs)));
+  }
+  75% {
+    transform: translate(calc(-2px * var(--bs)), calc(-2px * var(--bs)));
+  }
+}
+
+/* Crosses the ground a whole stride at a time, once per loop of its strip. The strip carries
+   the travel within a stride, so its feet never slide. */
+.scene-piece[data-move='stride'] {
+  animation: scene-stride calc(var(--loops) * var(--loop)) steps(var(--loops)) infinite;
+}
+
+@keyframes scene-stride {
+  to {
+    transform: translateX(calc(var(--loops) * var(--stride) * var(--cs) * 1px));
+  }
+}
+
+/* There and back, one of its own pixels a frame. */
+.scene-piece[data-move='patrol'] {
+  animation: scene-patrol calc(var(--steps) * 0.125s) steps(var(--steps)) infinite alternate;
+}
+
+@keyframes scene-patrol {
+  to {
+    transform: translateX(calc(var(--steps) * var(--cs) * 1px));
+  }
+}
+
+/* A season's creature pacing a level stretch of the Experience road, its feet on the middle
+   of the tiles: one of its own pixels a frame, there and back. */
+.road-critter {
+  position: absolute;
+  z-index: 4;
+  pointer-events: none;
+  left: calc((var(--col) + 0.5) * var(--tile) - var(--w) * var(--s) * 0.5px);
+  top: calc((var(--row) + 2.5) * var(--tile) - var(--h) * var(--s) * 1px);
+  animation: road-pace calc(var(--steps) * 0.125s) steps(var(--steps)) infinite alternate;
+}
+
+@keyframes road-pace {
+  to {
+    transform: translateX(calc(var(--steps) * var(--s) * 1px));
+  }
+}
+
+/* ---------- Hero, dialogue version ----------
+   Used by components/hero-dialogue. The section is a .hero, so it has the scene's scale steps,
+   sky and clipping. From laptops up the scene fills it, exactly as it does under the text
+   card, and the dialogue box and the portrait lie over the scene's foot (see the 1024px block
+   further down). On phones there is no room for that: there a strip of the scene sits above,
+   and below it the ground carries on as a panel holding the box.
+   --fs is the scale of the frame pieces and --ps the scale of the portrait: whole numbers,
+   switched at breakpoints. --pw and --ph are the portrait's size in sprite pixels, set by the
+   component from lib/sprites.ts. */
+.hero-d {
+  --fs: 2;
+  --ps: 1;
+  display: grid;
+  grid-template-rows: auto auto auto;
+}
+
+/* On phones the hero ends in the ground panel and its own blend, not in the painting's fade. */
+.hero-d::after {
+  content: none;
+}
+
+/* Here she stands in the gap between the houses, on background column 188, and small screens
+   keep that column in view. */
+.hero-d-stage {
+  --focus: 188;
+  --anchor: 50%;
+  position: relative;
+  overflow: hidden;
+  height: calc(104px * var(--bs));
+}
+
+.hero-d-stage .hero-luz {
+  left: calc(188px * var(--bs) - 32px * var(--cs));
+}
+
+.hero-d-ground {
+  position: relative;
+  background: var(--color-ground);
+}
+
+.hero-d-panel {
+  position: relative;
+  padding-bottom: 20px;
+}
+
+.hero-d-blend {
+  --from: var(--color-ground);
+  --to: var(--color-blush);
+}
+
+/* The box: a 9-slice frame of candy-cane rail and gingerbread around a cream centre. The
+   edges repeat rather than stretch, so every frame pixel stays square. */
+.dialogue {
+  position: relative;
+  border: calc(14px * var(--fs)) solid transparent;
+  border-image: url('/sprites/ui-dialogue-frame.png') 14 / calc(14px * var(--fs)) / 0 repeat;
+  /* a real background colour, so the text has a known colour behind it (and for contrast checks) */
+  background: var(--color-cream);
+  background-clip: padding-box;
+  image-rendering: pixelated;
+  cursor: pointer;
+}
+
+.dialogue-body {
+  padding: 26px 6px 2px;
+}
+
+/* The name plate: a gingerbread cookie with a candy-cane rim, sitting across the top rail. */
+.dialogue-name {
+  position: absolute;
+  top: calc(-14px * var(--fs));
+  left: calc(5px * var(--fs));
+  transform: translateY(-58%);
+  border: calc(7px * var(--fs)) solid transparent;
+  border-image: url('/sprites/ui-nameplate.png') 7 / calc(7px * var(--fs)) / 0 repeat;
+  background: #8f4f2a; /* the plate's darker gingerbread centre */
+  background-clip: padding-box;
+  padding: 0 calc(3px * var(--fs));
+  color: var(--color-cream);
+  font-size: 17px;
+  line-height: 1.25;
+  white-space: nowrap;
+  text-shadow: 2px 2px 0 var(--color-navy);
+  cursor: default;
+}
+
+/* Every page sits in the same grid cell, so the box is as tall as the longest page and never
+   jumps. Without JavaScript the pages simply follow one another. */
+.dialogue-pages {
+  display: grid;
+}
+
+.dialogue-page {
+  grid-area: 1 / 1;
+}
+
+html.js .dialogue-page[data-hidden] {
+  visibility: hidden;
+}
+
+html:not(.js) .dialogue-pages {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Replies, as a game's list of choices: framed buttons, one of them lit with the pointer
+   beside it. The lit one is the reply under the mouse; otherwise the one holding focus;
+   otherwise the default, which is the one Space picks. */
+.dialogue-pointer {
+  --s: 2;
+  visibility: hidden;
+}
+
+.dialogue-choice:hover,
+.dialogue-choices:not(:hover) .dialogue-choice:focus,
+.dialogue-choices:not(:hover):not(:focus-within) .dialogue-choice[data-default] {
+  background: var(--color-petal);
+}
+
+.dialogue-choice:hover .dialogue-pointer,
+.dialogue-choices:not(:hover) .dialogue-choice:focus .dialogue-pointer,
+.dialogue-choices:not(:hover):not(:focus-within) .dialogue-choice[data-default] .dialogue-pointer {
+  visibility: visible;
+}
+
+.dialogue-choice:active {
+  translate: 2px 2px;
+  box-shadow: 1px 1px 0 var(--color-navy);
+}
+
+/* "More to read": a small arrow under the last line that bobs one frame pixel. */
+.dialogue-continue {
+  --s: var(--fs);
+  position: absolute;
+  right: 0;
+  bottom: -2px;
+  animation: dialogue-bob 0.8s steps(2, jump-none) infinite;
+}
+
+@keyframes dialogue-bob {
+  to {
+    transform: translateY(calc(2px * var(--fs)));
+  }
+}
+
+/* The portrait. On phones it perches on the box's top right corner. */
+.dialogue-portrait {
+  --s: var(--ps);
+  position: absolute;
+  right: 20px;
+  top: calc(var(--ph) * var(--ps) * -1px + 30px);
+  pointer-events: none;
+}
+
+/* From tablets up the portrait stands at the right end of the box, feet level with its
+   bottom edge, and the box stops under her middle. The text keeps clear of her. */
+@media (min-width: 640px) {
+  .hero-d {
+    --ps: 2;
+  }
+
+  .dialogue {
+    margin-right: calc(var(--pw) * var(--ps) * 0.5px);
+  }
+
+  .dialogue-body {
+    padding-right: calc(var(--pw) * var(--ps) * 0.5px - 14px * var(--fs) + 14px);
+  }
+
+  .dialogue-portrait {
+    top: auto;
+    bottom: 20px;
+  }
+}
+
+/* From laptops up the dialogue lies over the scene. The scene is the whole hero, the size it
+   is under the text card and in the same place, so switching between the two heroes does not
+   move the painting or hide its sky. The box and the portrait share one grid cell with it and
+   sit at its foot, their bottom edge 16px under the line her feet stand on (background row
+   173), so they read as resting on the ground of the scene. */
+@media (min-width: 1024px) {
+  .hero-d {
+    --fs: 3;
+    grid-template-rows: auto;
+  }
+
+  /* the painting fades into the page, as it does under the card */
+  .hero-d::after {
+    content: '';
+  }
+
+  .hero-d-stage {
+    grid-area: 1 / 1;
+    height: auto;
+    min-height: min(calc(192px * var(--bs)), max(640px, calc(100svh - 76px)));
+  }
+
+  .hero-d-ground {
+    z-index: 1;
+    grid-area: 1 / 1;
+    align-self: end;
+    background: none;
+    /* only the box takes the mouse: around it the scene can still be hovered */
+    pointer-events: none;
+  }
+
+  .hero-d-ground .dialogue {
+    pointer-events: auto;
+  }
+
+  .hero-d-blend {
+    display: none;
+  }
+
+  .hero-d-panel {
+    padding-bottom: calc(19px * var(--bs) - 16px);
+  }
+
+  /* The box covers the ground she would stand on, so she is out of the scene until the window
+     is wide enough to stand beside her portrait (the blocks below). */
+  .hero-d-stage .hero-luz {
+    visibility: hidden;
+  }
+
+  .dialogue-body {
+    padding-top: 30px;
+    padding-left: 10px;
+  }
+
+  .dialogue-name {
+    font-size: 22px;
+  }
+
+  .dialogue-portrait {
+    right: 32px;
+    bottom: calc(19px * var(--bs) - 16px);
+  }
+}
+
+/* From 1280px the box gives up a strip at its right end, and she stands there on the ground of
+   the scene, beside her portrait: 46 of her pixels, which is her 40 across and a gap. Her
+   frame is 64 wide with her in columns 12 to 52. */
+@media (min-width: 1280px) {
+  .hero-d-panel {
+    padding-right: calc(32px + 46px * var(--cs));
+  }
+
+  .dialogue-portrait {
+    right: calc(32px + 46px * var(--cs));
+  }
+
+  .hero-d-stage .hero-luz {
+    left: calc(172px * var(--bs) + min(720px, 50vw) - 32px - 52px * var(--cs));
+    visibility: visible;
+  }
+}
+
+/* From 1900px there is room for her outside the 1440px column, so the box has its full width
+   back and she stands just past its right edge. */
+@media (min-width: 1900px) {
+  .hero-d-panel {
+    padding-right: 32px;
+  }
+
+  .dialogue-portrait {
+    right: 32px;
+  }
+
+  .hero-d-stage .hero-luz {
+    left: calc(172px * var(--bs) + 728px - 12px * var(--cs));
+  }
+}
+
+/* The larger portraits need a tall window, or her head would reach the hero switch and the
+   header. */
+@media (min-width: 1024px) and (min-height: 768px) {
+  .hero-d {
+    --ps: 3;
+  }
+}
+
+@media (min-width: 1440px) and (min-height: 940px) {
+  .hero-d {
+    --ps: 4;
+  }
+}
+
+/* On a very wide window she stands a little further out, where Luz placed her. */
+@media (min-width: 2300px) {
+  .hero-d-stage .hero-luz {
+    left: calc(172px * var(--bs) + 700px);
+  }
+}
+
+/* ---------- Hero switch ----------
+   The visitor's choice of hero is on <html data-hero>, set before first paint. The server
+   always sends the default hero, so until React swaps in the chosen one the other is kept
+   out of sight instead of flashing by. */
+html[data-hero='card'] .hero-view[data-view='dialogue'] > section,
+html[data-hero='dialogue'] .hero-view[data-view='card'] > section {
+  visibility: hidden;
+}
+
+/* ---------- Section blends ----------
+   A strip of stepped bands between two section colours, in the same pixel style as the
+   hero's fade. Set --from and --to with the classes below. */
+.blend {
+  height: 36px;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--to) 14%, var(--from)) 0.00% 16.67%,
+    color-mix(in srgb, var(--to) 28%, var(--from)) 16.67% 33.33%,
+    color-mix(in srgb, var(--to) 43%, var(--from)) 33.33% 50.00%,
+    color-mix(in srgb, var(--to) 57%, var(--from)) 50.00% 66.67%,
+    color-mix(in srgb, var(--to) 72%, var(--from)) 66.67% 83.33%,
+    color-mix(in srgb, var(--to) 86%, var(--from)) 83.33% 100.00%
+  );
+}
+
+.blend-blush-to-cream {
+  --from: var(--color-blush);
+  --to: var(--color-cream);
+}
+
+.blend-cream-to-blush {
+  --from: var(--color-cream);
+  --to: var(--color-blush);
+}
+
+/* ---------- Experience road ----------
+   A grid of 32px tiles. Tiles, character, bubble and props share one scale: 1x on small
+   screens, 2x from 1024px. Two empty rows above the road leave room for her and the bubble. */
+.road {
+  --s: 1;
+  --tile: calc(32px * var(--s));
+  --labels: 96px;
+  position: relative;
+  width: calc(var(--cols) * var(--tile));
+  height: calc((var(--rows) + 2) * var(--tile) + var(--labels));
+  margin-inline: auto;
+}
+
+@media (min-width: 1024px) {
+  .road {
+    --s: 2;
+    --labels: 112px;
+  }
+}
+
+.road-tile {
+  position: absolute;
+  left: calc(var(--col) * var(--tile));
+  top: calc((var(--row) + 2) * var(--tile));
+  transform: rotate(calc(var(--turns) * 90deg));
+}
+
+/* There is no faded corner tile, so the faded turns are the corner tile washed out. */
+.road-tile[data-washed] {
+  opacity: 0.42;
+  filter: saturate(0.7);
+}
+
+.road-stop {
+  position: absolute;
+  left: calc((var(--col) + 0.5) * var(--tile));
+  top: calc((var(--row) + 2) * var(--tile));
+  transform: translateX(-50%);
+  /* the button covers its stretch of road, so clicking the road at a stop works too */
+  padding-top: calc(var(--tile) + 6px);
+}
+
+/* The button is tall because it covers the road above its badge, so a focus ring around all
+   of it reads as a stray box. Keyboard focus rings the badge instead, outside the coral
+   ring that marks the selected stop. */
+.road-stop:focus-visible {
+  outline: none;
+}
+
+.road-stop:focus-visible .road-stop-badge {
+  outline: 3px solid var(--color-navy);
+  outline-offset: 8px;
+}
+
+/* --x and --y are her position in tiles, written by useJourney while she walks. */
+.road-walker {
+  position: absolute;
+  z-index: 5;
+  pointer-events: none;
+  left: calc((var(--x) + 0.5) * var(--tile) - 32px * var(--s));
+  top: calc((var(--y) + 2.5) * var(--tile) - 61px * var(--s));
+}
+
+.road-bubble {
+  position: absolute;
+  left: calc(16px * var(--s));
+  top: calc(-14px * var(--s));
+}
+
+.road-flag {
+  position: absolute;
+  left: calc((var(--cols) - 1) * var(--tile) + 6px * var(--s));
+  top: calc((var(--rows) + 1) * var(--tile) - 28px * var(--s));
+}
+
+.road-puff {
+  position: absolute;
+  left: 0;
+  top: var(--top, 0);
+  animation: puff-drift var(--d, 45s) steps(480) var(--at, 0s) infinite;
+}
+
+@keyframes puff-drift {
+  from {
+    transform: translateX(calc(-32px * var(--s)));
+  }
+  to {
+    transform: translateX(calc(var(--cols) * var(--tile)));
+  }
+}
+
+/* ---------- Season menu ----------
+   One framed control on the hero: a quiet label, the scene's name, an arrow. The frame is the
+   label's and so is the focus ring, so the menu inside never shows a box of its own. */
+.scene-menu {
+  --arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6' shape-rendering='crispEdges'%3E%3Cpath fill='%2323304d' d='M0 0h2v2H0zM8 0h2v2H8zM2 2h2v2H2zM6 2h2v2H6zM4 4h2v2H4z'/%3E%3C/svg%3E");
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 8px;
+  padding-left: 12px;
+  border: 3px solid var(--color-navy);
+  border-radius: 4px;
+  background: var(--color-cream);
+  box-shadow: var(--shadow-pixel-sm);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  anchor-name: --season-menu;
+}
+
+.scene-menu:has(select:focus-visible) {
+  outline: 3px solid var(--color-navy);
+  outline-offset: 3px;
+}
+
+.scene-menu-label {
+  color: var(--color-slate);
+  font-weight: 500;
+}
+
+.scene-menu select {
+  min-height: 38px;
+  padding: 0 34px 0 0;
+  border: 0;
+  border-radius: 0;
+  outline: none;
+  background: var(--arrow) no-repeat right 12px center / 10px 6px;
+  color: var(--color-navy);
+  font: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+  appearance: none;
+}
+
+/* Where the browser lets a menu's list be styled, the open list wears the site's colours and
+   hangs from the frame's right edge. Elsewhere it is the system's own list. */
+@supports (appearance: base-select) {
+  .scene-menu select,
+  .scene-menu select::picker(select) {
+    appearance: base-select;
+  }
+
+  .scene-menu select {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 12px 0 0;
+    background: none;
+  }
+
+  .scene-menu select::picker-icon {
+    width: 10px;
+    height: 6px;
+    background: var(--arrow) center / contain no-repeat;
+    content: '';
+  }
+
+  .scene-menu select::picker(select) {
+    /* below the frame, in line with its right edge; with its left edge where that would
+       run off a narrow screen; above only if there is no room below at all */
+    position-anchor: --season-menu;
+    position-area: block-end span-inline-start;
+    position-try-order: normal;
+    position-try-fallbacks:
+      block-end span-inline-end,
+      block-start span-inline-start,
+      block-start span-inline-end;
+    min-inline-size: anchor-size(inline);
+    margin: 8px 0 0;
+    padding: 4px;
+    border: 3px solid var(--color-navy);
+    border-radius: 4px;
+    background: var(--color-cream);
+    box-shadow: var(--shadow-pixel-sm);
+    color: var(--color-navy);
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .scene-menu option {
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 2px;
+    cursor: pointer;
+  }
+
+  .scene-menu option:is(:hover, :focus-visible) {
+    outline: none;
+    background: var(--color-petal);
+  }
+
+  .scene-menu option::checkmark {
+    color: var(--color-coral-ink);
+  }
+}
+
+/* ---------- Motion ----------
+   data-motion on <html> is the visitor's choice: it follows the system setting until they
+   use the header switch. With motion off every sprite holds a still frame. */
+html[data-motion='off'] {
+  scroll-behavior: auto;
+}
+
+html[data-motion='off'] :is(.sprite, .hero-cloud, .road-puff, .scene-piece, .road-critter) {
+  animation: none !important;
+}
+
+/* A piece that walks in from off screen stands where the season says instead. */
+html[data-motion='off'] .scene-piece[data-move='stride'] {
+  left: calc(var(--rest) * var(--bs) * 1px);
+}
+
+html[data-motion='off'] .road-puff {
+  transform: translateX(var(--rest, 0));
+}
+
+/* A bubble with no pop still has to show the whole bubble, which is its last frame. */
+html[data-motion='off'] .sprite[data-rest='last'] {
+  background-position-x: calc(var(--w) * (var(--n) - 1) * var(--s, 1) * -1px);
+}
+
+/* The same rules for visitors without JavaScript, who have no switch. */
+@media (prefers-reduced-motion: reduce) {
+  html:not(.js) {
+    scroll-behavior: auto;
+  }
+
+  html:not(.js) :is(.sprite, .hero-cloud, .road-puff) {
+    animation: none !important;
+  }
+
+  html:not(.js) .sprite[data-rest='last'] {
+    background-position-x: calc(var(--w) * (var(--n) - 1) * var(--s, 1) * -1px);
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "framework": "nextjs",
+  "redirects": [
+    { "source": "/about", "destination": "/#top", "permanent": true },
+    { "source": "/experience", "destination": "/#experience", "permanent": true },
+    { "source": "/projects", "destination": "/#projects", "permanent": true }
+  ]
+}

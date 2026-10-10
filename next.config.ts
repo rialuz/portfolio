@@ -1,0 +1,9 @@
+import type { NextConfig } from 'next'
+
+const nextConfig: NextConfig = {
+  // A fully static site: `next build` writes plain files to out/.
+  output: 'export',
+  images: { unoptimized: true },
+}
+
+export default nextConfig
