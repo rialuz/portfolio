@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Seasonal kits preview</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 32px; background: #FFF7EE; color: #23304D; font: 15px/1.5 system-ui, "Segoe UI", sans-serif; }
+  h1 { font-size: 22px; margin: 0 0 4px; }
+  h2 { font-size: 16px; margin: 36px 0 10px; }
+  p { margin: 0 0 12px; max-width: 78ch; }
+  code { font-size: 13px; background: #F3E7DA; padding: 1px 5px; border-radius: 3px; }
+
+  .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 6px; }
+  .tabs button { font: inherit; font-weight: 700; color: inherit; cursor: pointer; padding: 8px 16px; border: 3px solid #23304D;
+                 border-radius: 4px; background: #FFF7EE; box-shadow: 3px 3px 0 #23304D; }
+  .tabs button[aria-pressed="true"] { background: #F7C6C0; }
+  .row { display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center; margin: 8px 0 12px; }
+  .swatch { display: inline-block; width: 18px; height: 18px; border: 2px solid #23304D; vertical-align: -4px; margin-right: 4px; }
+
+  /* A strip played with steps(), as the site's Sprite does. --w --h frame size, --n frames, --t seconds, --s scale. */
+  .sprite { display: block; flex: none; width: calc(var(--w) * var(--s) * 1px); height: calc(var(--h) * var(--s) * 1px);
+            background-image: var(--sheet); background-repeat: no-repeat; background-position: 0 0;
+            background-size: calc(var(--w) * var(--n) * var(--s) * 1px) 100%; image-rendering: pixelated; }
+  .sprite[data-play] { animation: strip var(--t) steps(var(--n)) var(--at, 0s) infinite; }
+  .sprite[data-flipped] { transform: scaleX(-1); }
+  @keyframes strip { to { background-position-x: calc(var(--w) * var(--n) * var(--s) * -1px); } }
+
+  /* The hero: background at 4x, character at 3x, exactly as on the site at desktop width. */
+  .scene { --bs: 4; --cs: 3; position: relative; width: 1376px; height: 768px; overflow: hidden; border: 3px solid #23304D; border-bottom: 0; }
+  .scene > * { position: absolute; }
+  .ground { width: 1376px; height: 96px; border: 3px solid #23304D; border-top: 0; color: #FFF7EE; font-weight: 700;
+            display: flex; align-items: center; padding: 0 20px; }
+  .ground[data-light] { color: #23304D; }
+  .scroll { overflow-x: auto; }
+
+  /* Moving pieces. Positions are in background pixels; each step of a crossing is one background pixel. */
+  .drift { animation: drift-right calc(var(--secs) * 1s) steps(var(--span)) calc(var(--delay, 0) * 1s) infinite; }
+  .drift[data-to="left"] { animation-name: drift-left; }
+  @keyframes drift-right { from { transform: translateX(calc(var(--from) * 1px)); } to { transform: translateX(calc(var(--to) * 1px)); } }
+  @keyframes drift-left  { from { transform: translateX(calc(var(--to) * 1px)); } to { transform: translateX(calc(var(--from) * 1px)); } }
+  .hover { animation: hover 2.4s steps(1) calc(var(--delay, 0) * 1s) infinite; }
+  @keyframes hover {
+    0%   { transform: translate(0, 0); }
+    25%  { transform: translate(calc(2px * var(--bs)), calc(-2px * var(--bs))); }
+    50%  { transform: translate(0, calc(-4px * var(--bs))); }
+    75%  { transform: translate(calc(-2px * var(--bs)), calc(-2px * var(--bs))); }
+  }
+  .stride { animation: stride calc(var(--loops) * var(--loop) * 1s) steps(var(--loops)) infinite; }
+  @keyframes stride { to { transform: translateX(calc(var(--loops) * var(--stride) * var(--cs) * 1px)); } }
+  .patrol { animation: patrol calc(var(--steps) * var(--frame) * 1s) steps(var(--steps)) infinite alternate; }
+  @keyframes patrol { to { transform: translateX(calc(var(--steps) * var(--cs) * 1px)); } }
+
+  .road { position: relative; image-rendering: pixelated; }
+  .road > * { position: absolute; }
+
+  .kit { display: flex; flex-wrap: wrap; gap: 18px 22px; align-items: flex-end; }
+  .kit figure { margin: 0; display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
+  .kit figcaption { font-size: 12px; }
+  .still { image-rendering: pixelated; display: block; }
+</style>
+</head>
+<body>
+<h1>Seasonal kits</h1>
+<p>Each season swaps the pixel environment only: the painting behind the hero, the sky pieces, the road tiles, the
+flag and a set of props and moving pieces. The site's colours and the character do not change. This page ignores the
+system's animation setting, so everything here moves.</p>
+<div class="tabs" id="tabs"></div>
+<div class="row" id="facts"></div>
+
+<h2>Hero scene</h2>
+<div class="row"><label><input type="checkbox" id="dialogue" checked> Stand where the dialogue hero puts her (column 188, no flag)</label></div>
+<div class="scroll"><div class="scene" id="scene"></div><div class="ground" id="ground"></div></div>
+
+<h2>Experience road</h2>
+<div class="scroll"><div class="road" id="road"></div></div>
+
+<h2>Every piece in this season's folder</h2>
+<div class="kit" id="kit"></div>
+
+<script src="seasons-data.js"></script>
+<script>
+const BASE = '../../public/sprites/'
+const BS = 4, CS = 3
+const data = window.SEASONS
+const CANDY = {
+  label: 'Candy land (current)', sky: '#fbd1e3', ground: '#965e39', foreground: false,
+  clouds: [{ sheet: 'bg-cloud-1', x: 33, y: 22 }, { sheet: 'bg-cloud-2', x: 221, y: 25 }, { sheet: 'bg-cloud-3', x: 81, y: 53 }],
+  sprites: {}, ambient: [], roadWalkers: [],
+}
+const SHARED = {   // sizes of the pieces every season replaces, and of the character
+  'bg-hero': [344, 192, 1, 0], 'fg-hero': [344, 192, 1, 0], 'bg-cloud-1': [39, 18, 1, 0], 'bg-cloud-2': [67, 31, 1, 0],
+  'bg-cloud-3': [61, 27, 1, 0], 'prop-cloud': [32, 32, 1, 0], 'prop-flag': [32, 32, 4, 0.7],
+  'tile-road-straight': [32, 32, 1, 0], 'tile-road-corner': [32, 32, 1, 0], 'tile-road-faded': [32, 32, 1, 0],
+  'luz-idle': [64, 64, 4, 1.7], 'luz-walk': [64, 64, 8, 0.8],
+}
+let season = 'halloween'
+
+const facts = (id, name) => {
+  const s = id !== 'candy' && data.seasons[id].sprites[name]
+  if (s) return [s.w, s.h, s.frames, s.duration]
+  return SHARED[name]
+}
+const folder = (id) => (id === 'candy' ? BASE : `${BASE}seasons/${id}/`)
+
+function sprite(id, name, scale, extra = {}) {
+  const [w, h, n, t] = facts(id, name)
+  const el = document.createElement('span')
+  el.className = 'sprite'
+  el.style.cssText = `--sheet:url(${folder(id, name)}${name}.png);--w:${w};--h:${h};--n:${n};--t:${t}s;--s:${scale}`
+  if (n > 1) el.dataset.play = ''
+  if (extra.flipped) el.dataset.flipped = ''
+  if (extra.delay) el.style.setProperty('--at', `${extra.delay}s`)
+  return el
+}
+
+function place(el, x, y) {          // background pixels
+  el.style.left = `${x * BS}px`
+  el.style.top = `${y * BS}px`
+  return el
+}
+
+function ambient(id, a) {
+  const scale = a.scale === 'bg' ? BS : CS
+  const [w, , n, t] = facts(id, a.sheet)
+  const body = sprite(id, a.sheet, scale, a)
+  // The strip plays on the sprite and the travel on a wrapper: one element cannot run both.
+  const el = document.createElement('span')
+  el.style.display = 'block'
+  el.append(body)
+  place(el, a.x, a.y)
+  if (a.delay && a.motion !== 'still') el.style.setProperty('--delay', a.delay)
+  if (a.motion === 'drift') {
+    const wide = Math.ceil((w * scale) / BS)
+    el.classList.add('drift')
+    el.dataset.to = a.to
+    el.style.left = '0'
+    el.style.setProperty('--from', -wide * BS)
+    el.style.setProperty('--to', 344 * BS)
+    el.style.setProperty('--span', 344 + wide)
+    el.style.setProperty('--secs', a.seconds)
+    if (a.to === 'left') body.dataset.flipped = ''
+  } else if (a.motion === 'hover') {
+    el.classList.add('hover')
+    el.style.setProperty('--bs', BS)
+  } else if (a.motion === 'stride') {
+    el.classList.add('stride')
+    el.style.setProperty('--stride', a.stride)
+    el.style.setProperty('--loops', Math.ceil(((a.x2 - a.x) * BS) / (a.stride * CS)))
+    el.style.setProperty('--loop', t)
+    el.style.setProperty('--cs', CS)
+  } else if (a.motion === 'patrol') {
+    el.classList.add('patrol')
+    el.style.setProperty('--steps', Math.round(((a.x2 - a.x) * BS) / CS))
+    el.style.setProperty('--frame', t / n)
+    el.style.setProperty('--cs', CS)
+  }
+  return el
+}
+
+function drawScene(id) {
+  const s = id === 'candy' ? CANDY : data.seasons[id]
+  const scene = document.getElementById('scene')
+  const dialogue = document.getElementById('dialogue').checked
+  scene.replaceChildren()
+  scene.style.background = s.sky
+  scene.append(place(sprite(id, 'bg-hero', BS), 0, 0))
+  s.ambient.filter((a) => a.layer === 'back' && a.sheet === 'fx-wave').forEach((a) => scene.append(ambient(id, a)))
+  s.clouds.forEach((c, i) => {
+    const el = place(sprite(id, c.sheet, BS), 0, c.y)
+    const [w] = facts(id, c.sheet)
+    el.classList.add('drift')
+    el.dataset.to = 'right'
+    el.style.setProperty('--from', -70 * BS)
+    el.style.setProperty('--to', 344 * BS)
+    el.style.setProperty('--span', 414)
+    el.style.setProperty('--secs', [90, 130, 110][i])
+    el.style.setProperty('--delay', -(((c.x + 70) / 414) * [90, 130, 110][i]).toFixed(2))
+    scene.append(el)
+  })
+  s.ambient.filter((a) => a.layer === 'back' && a.sheet !== 'fx-wave').forEach((a) => scene.append(ambient(id, a)))
+  if (s.foreground) scene.append(place(sprite(id, 'fg-hero', BS), 0, 0))
+  s.ambient.filter((a) => a.layer === 'front').forEach((a) => scene.append(ambient(id, a)))
+  const col = dialogue ? 188 : 262
+  if (!dialogue) {
+    const flag = sprite(id, 'prop-flag', CS)
+    flag.style.left = `${240 * BS - 20 * CS}px`
+    flag.style.top = `${173 * BS - 32 * CS}px`
+    scene.append(flag)
+  }
+  const luz = sprite(id, 'luz-idle', CS)
+  luz.style.left = `${col * BS - 32 * CS}px`
+  luz.style.top = `${173 * BS - 62 * CS}px`        // two empty rows sit under her feet
+  scene.append(luz)
+
+  const ground = document.getElementById('ground')
+  ground.style.background = s.ground
+  const [r, g, b] = [1, 3, 5].map((i) => parseInt(s.ground.slice(i, i + 2), 16))
+  ground.toggleAttribute('data-light', r * 0.299 + g * 0.587 + b * 0.114 > 150)
+  ground.textContent = `Ground colour ${s.ground}: what the dialogue box sits on`
+}
+
+function drawRoad(id) {
+  const s = id === 'candy' ? CANDY : data.seasons[id]
+  const road = document.getElementById('road')
+  const T = 32 * CS
+  const turn = { tl: 0, tr: 90, rb: 180, lb: 270 }     // the corner art joins left and top
+  road.replaceChildren()
+  // S straight, V straight turned upright, F faded; corners are named by the two sides they join.
+  const grid = [
+    ['', '', 'rb', 'S', 'S', 'lb', '', ''],
+    ['', '', 'V', '', '', 'V', '', ''],
+    ['S', 'S', 'tl', '', '', 'tr', 'F', 'F'],
+  ]
+  road.style.width = `${grid[0].length * T}px`
+  road.style.height = `${grid.length * T + 40}px`
+  grid.forEach((row, y) =>
+    row.forEach((cell, x) => {
+      if (!cell) return
+      const name = cell === 'F' ? 'tile-road-faded' : cell === 'S' || cell === 'V' ? 'tile-road-straight' : 'tile-road-corner'
+      const el = sprite(id, name, CS)
+      el.style.left = `${x * T}px`
+      el.style.top = `${y * T + 40}px`
+      const deg = cell === 'V' ? 90 : turn[cell] || 0
+      if (deg) el.style.transform = `rotate(${deg}deg)`
+      road.append(el)
+    }),
+  )
+  const flag = sprite(id, 'prop-flag', CS)
+  flag.style.left = `${7.5 * T - 20 * CS}px`
+  flag.style.top = `${2 * T + 40 - 32 * CS + 6 * CS}px`
+  road.append(flag)
+  const luz = sprite(id, 'luz-walk', CS)
+  luz.style.left = `${0.5 * T - 32 * CS}px`
+  luz.style.top = `${2 * T + 40 + 16 * CS - 62 * CS}px`
+  road.append(luz)
+  s.roadWalkers.slice(0, 1).forEach((name) => {
+    const [, h, n, t] = facts(id, name)
+    const el = document.createElement('span')      // travel on the wrapper, the strip on the sprite
+    el.append(sprite(id, name, CS))
+    el.style.left = `${3 * T}px`
+    el.style.top = `${40 + 16 * CS - (h - 4) * CS}px`
+    if (name === 'fx-bunny') {
+      el.classList.add('stride')
+      el.style.setProperty('--stride', 16)
+      el.style.setProperty('--loops', 4)
+      el.style.setProperty('--loop', t)
+      el.style.setProperty('--cs', CS)
+    } else {
+      el.classList.add('patrol')
+      el.style.setProperty('--steps', 56)
+      el.style.setProperty('--frame', t / n)
+      el.style.setProperty('--cs', CS)
+    }
+    road.append(el)
+  })
+}
+
+function drawKit(id) {
+  const kit = document.getElementById('kit')
+  kit.replaceChildren()
+  if (id === 'candy') {
+    kit.textContent = 'The candy kit is the site as it is now; its pieces are in public/sprites.'
+    return
+  }
+  const s = data.seasons[id]
+  const names = [...data.replaces, ...(s.foreground ? ['fg-hero'] : []), ...Object.keys(s.sprites)]
+  for (const name of names) {
+    const [w, h, n] = facts(id, name)
+    const fig = document.createElement('figure')
+    const big = w > 100
+    fig.append(sprite(id, name, big ? 1 : 3))
+    const cap = document.createElement('figcaption')
+    cap.textContent = `${name}.png  ${w}x${h}${n > 1 ? `, ${n} frames` : ''}`
+    fig.append(cap)
+    kit.append(fig)
+  }
+}
+
+function draw() {
+  const s = season === 'candy' ? CANDY : data.seasons[season]
+  for (const b of document.querySelectorAll('#tabs button')) b.setAttribute('aria-pressed', String(b.dataset.id === season))
+  const row = document.getElementById('facts')
+  row.innerHTML = ''
+  const add = (html) => { const d = document.createElement('span'); d.innerHTML = html; row.append(d) }
+  add(`Folder: <code>public/sprites/${season === 'candy' ? '' : `seasons/${season}/`}</code>`)
+  add(`<span class="swatch" style="background:${s.sky}"></span>sky ${s.sky}`)
+  add(`<span class="swatch" style="background:${s.ground}"></span>ground ${s.ground}`)
+  drawScene(season)
+  drawRoad(season)
+  drawKit(season)
+}
+
+const tabs = document.getElementById('tabs')
+for (const id of ['halloween', 'valentines', 'easter', 'summer', 'candy']) {
+  const b = document.createElement('button')
+  b.type = 'button'
+  b.dataset.id = id
+  b.textContent = id === 'candy' ? CANDY.label : data.seasons[id].label
+  b.addEventListener('click', () => { season = id; history.replaceState(null, '', `#${id}`); draw() })
+  tabs.append(b)
+}
+document.getElementById('dialogue').addEventListener('change', draw)
+if (location.hash && (location.hash.slice(1) === 'candy' || data.seasons[location.hash.slice(1)])) season = location.hash.slice(1)
+draw()
+</script>
+</body>
+</html>

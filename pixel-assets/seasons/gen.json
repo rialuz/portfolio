@@ -1,0 +1,36 @@
+[
+  {"season": "halloween", "name": "prop-pumpkin", "w": 32, "h": 32, "seed": 4101, "desc": "Smiling carved jack-o'-lantern pumpkin with glowing yellow eyes and mouth and a green stem, front view."},
+  {"season": "halloween", "name": "prop-tombstone", "w": 32, "h": 32, "seed": 4102, "desc": "Rounded grey stone tombstone engraved with a small cross, a tuft of green grass at its base, front view."},
+  {"season": "halloween", "name": "prop-cauldron", "w": 32, "h": 32, "seed": 4103, "desc": "Black witch cauldron full of bubbling bright green potion, front view."},
+  {"season": "halloween", "name": "prop-witch-hat", "w": 32, "h": 32, "seed": 4104, "desc": "Black pointed witch hat with a purple band and a gold buckle."},
+  {"season": "halloween", "name": "prop-black-cat", "w": 32, "h": 32, "seed": 4105, "desc": "Black cat sitting and facing the viewer, big yellow eyes, tail curled up."},
+  {"season": "halloween", "name": "fx-bat-base", "w": 32, "h": 32, "seed": 4106, "desc": "Cute dark purple bat flying with both wings spread wide, small white fangs, front view, symmetrical."},
+  {"season": "halloween", "name": "fx-ghost-base", "w": 32, "h": 32, "seed": 4107, "desc": "Cute white bedsheet ghost floating, round black eyes, small smile, little arms raised, front view, symmetrical."},
+
+  {"season": "valentines", "name": "prop-teddy", "w": 32, "h": 32, "seed": 4201, "desc": "Brown teddy bear sitting and holding a red heart, front view."},
+  {"season": "valentines", "name": "prop-gift", "w": 32, "h": 32, "seed": 4202, "desc": "Red gift box tied with a pink ribbon bow, front view."},
+  {"season": "valentines", "name": "prop-rose", "w": 32, "h": 32, "seed": 4203, "desc": "Single red rose with a green stem and two leaves."},
+  {"season": "valentines", "name": "prop-heart-lock", "w": 32, "h": 32, "seed": 4204, "desc": "Red heart-shaped padlock with a gold keyhole and a silver shackle."},
+  {"season": "valentines", "name": "prop-chocolates", "w": 32, "h": 32, "seed": 4205, "desc": "Open red heart-shaped box of brown chocolates, seen from the front."},
+  {"season": "valentines", "name": "prop-love-letter", "w": 32, "h": 32, "seed": 4206, "desc": "White envelope love letter sealed with a red heart."},
+  {"season": "valentines", "name": "fx-cupid-base", "w": 48, "h": 48, "seed": 4207, "desc": "Cute chibi cupid cherub flying, side view facing right, small white feathered wings, curly blond hair, white toga, holding a golden bow."},
+
+  {"season": "easter", "name": "prop-basket", "w": 32, "h": 32, "seed": 4301, "desc": "Woven wicker Easter basket with a handle, full of colorful painted eggs, front view."},
+  {"season": "easter", "name": "prop-tulip", "w": 32, "h": 32, "seed": 4302, "desc": "Pink tulip flower with a green stem and two leaves."},
+  {"season": "easter", "name": "prop-daffodil", "w": 32, "h": 32, "seed": 4303, "desc": "Yellow daffodil flower with a green stem and leaves."},
+  {"season": "easter", "name": "prop-chick", "w": 32, "h": 32, "seed": 4304, "desc": "Cute yellow baby chick hatching from a cracked white eggshell, front view."},
+  {"season": "easter", "name": "prop-carrot", "w": 32, "h": 32, "seed": 4305, "desc": "Orange carrot with a green leafy top."},
+  {"season": "easter", "name": "fx-bunny-base", "w": 32, "h": 32, "seed": 4306, "desc": "Cute white bunny rabbit sitting, side view facing right, long upright ears with pink insides, fluffy round tail."},
+  {"season": "easter", "name": "fx-butterfly-base", "w": 32, "h": 32, "seed": 4307, "desc": "Pink and yellow butterfly with both wings open, top view, symmetrical."},
+
+  {"season": "summer", "name": "prop-palm", "w": 48, "h": 64, "seed": 4401, "desc": "Tall palm tree with green fronds and a brown trunk growing from a small mound of sand, side view."},
+  {"season": "summer", "name": "prop-umbrella", "w": 48, "h": 48, "seed": 4402, "desc": "Red and white striped beach umbrella planted upright in a small mound of sand."},
+  {"season": "summer", "name": "prop-lawn-chair", "w": 32, "h": 32, "seed": 4403, "desc": "Wooden beach lounge chair with a turquoise and white striped cushion, side view."},
+  {"season": "summer", "name": "prop-shell", "w": 32, "h": 32, "seed": 4404, "desc": "Pink scallop seashell, front view."},
+  {"season": "summer", "name": "prop-starfish", "w": 32, "h": 32, "seed": 4405, "desc": "Orange five-armed starfish, top view."},
+  {"season": "summer", "name": "prop-life-ring", "w": 32, "h": 32, "seed": 4406, "desc": "Red and white life preserver ring, front view."},
+  {"season": "summer", "name": "prop-watermelon", "w": 32, "h": 32, "seed": 4407, "desc": "Slice of watermelon with a green rind, red flesh and black seeds."},
+  {"season": "summer", "name": "prop-drink", "w": 32, "h": 32, "seed": 4408, "desc": "Orange tropical drink in a tall glass with a striped straw and a slice of orange on the rim."},
+  {"season": "summer", "name": "fx-crab-base", "w": 32, "h": 32, "seed": 4409, "desc": "Cute red crab with two raised claws, small black eyes on stalks and six legs, front view, symmetrical."},
+  {"season": "summer", "name": "fx-dolphin-base", "w": 48, "h": 32, "seed": 4410, "desc": "Blue dolphin leaping in an arc, side view facing right, arched body, light grey belly."}
+]

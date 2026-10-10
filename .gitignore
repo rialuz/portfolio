@@ -14,8 +14,20 @@ dist-ssr
 coverage
 *.local
 
-/cypress/videos/
-/cypress/screenshots/
+# Next.js
+.next
+out
+next-env.d.ts
+
+# Playwright
+test-results
+playwright-report
+
+# Raw PixelLab output, including rejected attempts
+pixel-assets/raw/
+
+# Python caches from the sprite tools
+__pycache__/
 
 # Editor directories and files
 .vscode/*

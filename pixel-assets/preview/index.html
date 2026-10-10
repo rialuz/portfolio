@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Luz pixel kit preview</title>
+<style>
+  :root { --sprites: url("../../public/sprites/"); }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 32px; background: #FFF7EE; color: #23304D; font: 15px/1.5 system-ui, "Segoe UI", sans-serif; }
+  h1 { font-size: 22px; margin: 0 0 4px; }
+  h2 { font-size: 16px; margin: 40px 0 12px; }
+  p { margin: 0 0 12px; max-width: 70ch; }
+  .px { image-rendering: pixelated; background-repeat: no-repeat; }
+
+  /* one 64x64 frame, played with steps(); --n is the frame count, --s the whole-number scale */
+  .luz { width: 64px; height: 64px; transform: scale(var(--s, 1)); transform-origin: bottom left; }
+  .luz.play { animation: strip var(--t) steps(var(--n)) var(--loop, infinite); }
+  @keyframes strip { to { background-position: calc(var(--n) * -64px) 0; } }
+
+  .idle      { background-image: url("../../public/sprites/luz-idle.png");      --n: 4; --t: 1.7s; }
+  .wave      { background-image: url("../../public/sprites/luz-wave.png");      --n: 6; --t: 0.9s; }
+  .walk      { background-image: url("../../public/sprites/luz-walk.png");      --n: 8; --t: 0.8s; }
+  .walk-down { background-image: url("../../public/sprites/luz-walk-down.png"); --n: 8; --t: 0.8s; }
+  .walk-up   { background-image: url("../../public/sprites/luz-walk-up.png");   --n: 8; --t: 0.8s; }
+  .hop       { background-image: url("../../public/sprites/luz-hop.png");       --n: 4; --t: 0.45s; }
+  .celebrate { background-image: url("../../public/sprites/luz-celebrate.png"); --n: 6; --t: 0.7s; }
+
+  /* hero: background at 4x, character at 3x */
+  .hero { position: relative; width: 1376px; height: 768px; background-image: url("../../public/sprites/bg-hero.png");
+          background-size: 1376px 768px; border: 3px solid #23304D; overflow: hidden; }
+  /* The ground is the white frosting strip the houses stand on (background rows 170-173), not the
+     brown face below it. Feet and the flag's pole rest on background row 172: y = 173 * 4 = 692px. */
+  .hero .luz { position: absolute; left: 950px; top: 634px; --s: 3; }   /* 2 empty rows under the feet: 692 + 6 - 64 */
+  .hero .luz.wave { display: none; }
+  .hero:hover .luz.idle { display: none; }
+  .hero:hover .luz.wave { display: block; }
+
+  /* clouds lifted out of the background: each step moves one background pixel (4px), so they stay crisp.
+     The negative delay starts each cloud where it sat in the original painting. */
+  .cloud { position: absolute; left: 0; background-size: 100% 100%; animation: drift var(--d) steps(414) var(--at) infinite; }
+  @keyframes drift { from { transform: translateX(-280px); } to { transform: translateX(1376px); } }
+  .cloud.c1 { width: 156px; height: 72px;  top: 88px;  background-image: url("../../public/sprites/bg-cloud-1.png"); --d: 90s;  --at: -22s; }
+  .cloud.c2 { width: 268px; height: 124px; top: 100px; background-image: url("../../public/sprites/bg-cloud-2.png"); --d: 130s; --at: -91s; }
+  .cloud.c3 { width: 244px; height: 108px; top: 212px; background-image: url("../../public/sprites/bg-cloud-3.png"); --d: 110s; --at: -40s; }
+
+  /* flag: 4 frames of 32x32 */
+  .flag { width: 32px; height: 32px; background: url("../../public/sprites/prop-flag.png") 0 0 no-repeat; image-rendering: pixelated;
+          transform: scale(var(--s, 3)); transform-origin: bottom left; animation: flap 0.7s steps(4) infinite; }
+  @keyframes flap { to { background-position: -128px 0; } }
+  .hero .flag { position: absolute; left: 700px; top: 660px; }           /* 692 - 32 */
+
+  /* emotions: a 64px strip for her face and arms, plus a 32px speech bubble that pops in once */
+  .emote-wow    { background-image: url("../../public/sprites/luz-emote-wow.png");    --n: 4; --t: 1.7s; }
+  .emote-grin   { background-image: url("../../public/sprites/luz-emote-grin.png");   --n: 4; --t: 1.7s; }
+  .emote-cheer  { background-image: url("../../public/sprites/luz-emote-cheer.png");  --n: 6; --t: 0.9s; }
+  .emote-happy  { background-image: url("../../public/sprites/luz-emote-happy.png");  --n: 4; --t: 1.7s; }
+  .emote-starry { background-image: url("../../public/sprites/luz-emote-starry.png"); --n: 4; --t: 1.7s; }
+  .emote-student { background-image: url("../../public/sprites/luz-emote-student.png"); --n: 4; --t: 1.7s; }
+  .stage.talk { margin-top: 36px; }   /* headroom so the bubble's tail ends just above her hair */
+  .bubble { position: absolute; left: 80px; top: -36px; width: 32px; height: 32px; image-rendering: pixelated; background-repeat: no-repeat;
+            transform: scale(3); transform-origin: top left; animation: pop 3s steps(1) infinite; }
+  @keyframes pop { 0% { background-position: 0 0; } 4% { background-position: -32px 0; } 8% { background-position: -64px 0; }
+                   12%, 100% { background-position: -96px 0; } }
+
+  .gallery { display: flex; flex-wrap: wrap; gap: 20px; }
+  .card { background: #FBE9E5; border: 2px solid #23304D; padding: 12px 12px 8px; }
+  .stage { width: 256px; height: 256px; position: relative; }
+  .stage .luz { position: absolute; left: 0; bottom: 0; --s: 4; }
+  .card span { display: block; margin-top: 6px; font-size: 13px; }
+
+  /* road: tiles and character at the same pixel size (shown 2x) */
+  .road { position: relative; width: 960px; height: 192px; background: #FFF7EE; overflow: hidden; }
+  .road .tiles { position: absolute; left: 0; bottom: 0; width: 480px; height: 32px; transform: scale(2); transform-origin: bottom left;
+                 background: url("../../public/sprites/tile-road-straight.png") repeat-x; image-rendering: pixelated; }
+  .road .walker { position: absolute; left: 0; bottom: 30px; animation: travel 9s linear infinite; }
+  .road .luz { --s: 2; }
+  .road .flag { position: absolute; left: 700px; bottom: 62px; --s: 2; }
+  .road .puff { position: absolute; left: 0; top: 0; width: 32px; height: 32px; image-rendering: pixelated;
+                background: url("../../public/sprites/prop-cloud.png") no-repeat; animation: puff 45s steps(520) infinite; }
+  .road .puff.b { top: 26px; animation-duration: 70s; animation-delay: -30s; }
+  @keyframes puff { from { transform: translateX(-70px) scale(2); } to { transform: translateX(970px) scale(2); } }
+  @keyframes travel { from { transform: translateX(0); } to { transform: translateX(830px); } }
+
+  .set { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end; }
+  .set img { image-rendering: pixelated; height: 96px; background: #FBE9E5; border: 2px solid #23304D; }
+  .sparkle { width: 32px; height: 32px; background: url("../../public/sprites/prop-sparkle.png") 0 0 no-repeat; image-rendering: pixelated;
+             transform: scale(3); transform-origin: bottom left; margin-right: 64px; animation: twinkle 0.8s steps(4) infinite; }
+  @keyframes twinkle { to { background-position: -128px 0; } }
+
+  /* No prefers-reduced-motion rule here on purpose: this page exists to show the motion. */
+</style>
+</head>
+<body>
+  <h1>Luz pixel kit preview</h1>
+  <p>Everything here is read from <code>public/sprites/</code>. Sprites are shown at whole-number scales only.</p>
+
+  <h2>Hero (background 4x, character and props 3x). Clouds drift, the flag waves; hover the scene and she waves.</h2>
+  <div class="hero px">
+    <div class="cloud px c1"></div>
+    <div class="cloud px c2"></div>
+    <div class="cloud px c3"></div>
+    <div class="flag"></div>
+    <div class="luz px idle play"></div>
+    <div class="luz px wave play"></div>
+  </div>
+
+  <h2>Animations (4x)</h2>
+  <div class="gallery">
+    <div class="card"><div class="stage"><div class="luz px idle play"></div></div><span>luz-idle.png, 4 frames, loops</span></div>
+    <div class="card"><div class="stage"><div class="luz px wave play"></div></div><span>luz-wave.png, 6 frames</span></div>
+    <div class="card"><div class="stage"><div class="luz px walk play"></div></div><span>luz-walk.png, 8 frames, loops</span></div>
+    <div class="card"><div class="stage"><div class="luz px walk-down play"></div></div><span>luz-walk-down.png, 8 frames, loops</span></div>
+    <div class="card"><div class="stage"><div class="luz px walk-up play"></div></div><span>luz-walk-up.png, 8 frames, loops</span></div>
+    <div class="card"><div class="stage"><div class="luz px hop play"></div></div><span>luz-hop.png, 4 frames</span></div>
+    <div class="card"><div class="stage"><div class="luz px celebrate play"></div></div><span>luz-celebrate.png, 6 frames</span></div>
+  </div>
+
+  <h2>Emotions for the journey stops (4x, with the speech bubble that pops in on arrival)</h2>
+  <div class="gallery">
+    <div class="card"><div class="stage talk"><div class="bubble" style="background-image:url('../../public/sprites/emote-wow.png')"></div><div class="luz px emote-student play"></div></div><span>Apprentice, student look: luz-emote-student.png</span></div>
+    <div class="card"><div class="stage talk"><div class="bubble" style="background-image:url('../../public/sprites/emote-wow.png')"></div><div class="luz px emote-wow play"></div></div><span>Apprentice, alternate: luz-emote-wow.png + emote-wow.png</span></div>
+    <div class="card"><div class="stage talk"><div class="bubble" style="background-image:url('../../public/sprites/emote-grin.png')"></div><div class="luz px emote-grin play"></div></div><span>Software Engineer: luz-emote-grin.png + emote-grin.png</span></div>
+    <div class="card"><div class="stage talk"><div class="bubble" style="background-image:url('../../public/sprites/emote-cheer.png')"></div><div class="luz px emote-cheer play"></div></div><span>Junior Frontend Dev: luz-emote-cheer.png + emote-cheer.png</span></div>
+    <div class="card"><div class="stage talk"><div class="bubble" style="background-image:url('../../public/sprites/emote-happy.png')"></div><div class="luz px emote-happy play"></div></div><span>Frontend Team Lead: luz-emote-happy.png + emote-happy.png</span></div>
+    <div class="card"><div class="stage talk"><div class="bubble" style="background-image:url('../../public/sprites/emote-starry.png')"></div><div class="luz px emote-starry play"></div></div><span>Where I'm headed: luz-emote-starry.png + emote-starry.png</span></div>
+  </div>
+
+  <h2>Road (tiles and character at the same pixel size, 2x)</h2>
+  <div class="road"><div class="puff"></div><div class="puff b"></div><div class="tiles"></div><div class="flag"></div><div class="walker"><div class="luz px walk play"></div></div></div>
+
+  <h2>Props and tiles</h2>
+  <div class="set">
+    <img src="../../public/sprites/prop-gumdrop.png" alt="gumdrop">
+    <img src="../../public/sprites/prop-lollipop.png" alt="lollipop">
+    <img src="../../public/sprites/prop-candy-cane-sign.png" alt="candy cane sign">
+    <div class="flag" role="img" aria-label="flag, 4 frames" style="margin-right: 64px"></div>
+    <img src="../../public/sprites/prop-cloud.png" alt="cloud">
+    <div class="sparkle" role="img" aria-label="sparkle, 4 frames"></div>
+    <img src="../../public/sprites/tile-road-straight.png" alt="road, straight">
+    <img src="../../public/sprites/tile-road-corner.png" alt="road, corner">
+    <img src="../../public/sprites/tile-road-faded.png" alt="road, faded">
+  </div>
+</body>
+</html>
